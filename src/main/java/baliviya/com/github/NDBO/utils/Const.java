@@ -190,4 +190,6 @@ public class Const {
     public static final int REMINDER_EDIT_SINGLE_MESSAGE            = 1148;
     public static final int SEND_MESSAGE_TEXT_MESSAGE               = 1149;
     public static final int UPDATE_REGISTRATION_MESSAGE             = 1150;
+    public static final int SELECT_EMPLOYEE_FROM_HANDLING_MESSAGE   = 1151;
+    public static final int SEND_USER_FROM_SPEC_MESSAGE             = 1152;
 }

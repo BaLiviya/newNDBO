@@ -10,4 +10,5 @@ public class Handling {
     private String  text;
     private int     handlingTypeId;
     private String  fullName;
+    private long    handlingTeacherId;
 }
