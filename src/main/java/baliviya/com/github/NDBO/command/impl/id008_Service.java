@@ -34,31 +34,31 @@ public class id008_Service extends Command {
     private ServiceSurveyAnswer     surveyAnswer;
 
     @Override
-    public boolean execute()             throws TelegramApiException {
+    public boolean  execute()               throws TelegramApiException {
         switch (waitingType) {
             case START:
+                deleteMessage(updateMessageId);
                 if(!isRecipient()) {
-                    deleteMessageId      = registrationMessage();
+                    deleteMessageId         = registrationMessage();
                     return EXIT;
                 }
-                deleteMessage(updateMessageId);
-                registrationService = new RegistrationService();
+                registrationService         = new RegistrationService();
                 registrationService.setRegistrationDate(new Date());
                 registrationService.setChatId(chatId);
-//                registrationService.setIin(Long.parseLong(userDao.getUserByChatId(chatId).getIin())); // TODO: 08.07.2020 спросить что делать с ИИН
-                deleteMessageId     = getServiceType();
-                waitingType         = WaitingType.SET_SERVICE_TYPE;
+//                registrationService.setIin(Long.parseLong(userDao.getUserByChatId(chatId).getIin())); // TODO: 08.07.2020 сделать ИИН
+                deleteMessageId             = getServiceType();
+                waitingType                 = WaitingType.SET_SERVICE_TYPE;
                 return COMEBACK;
             case SET_SERVICE_TYPE:
                 delete();
                 if (hasCallbackQuery()) {
-                    serviceTypeId         = serviceTypes.get(Integer.parseInt(updateMessageText)).getId();
+                    serviceTypeId           = serviceTypes.get(Integer.parseInt(updateMessageText)).getId();
                     registrationService.setServiceTypeId(serviceTypeId);
-                    deleteMessageId       = getService();
-                    waitingType           = WaitingType.SET_SERVICE;
+                    deleteMessageId         = getService();
+                    waitingType             = WaitingType.SET_SERVICE;
                 } else {
-                    secondDeleteMessageId = wrongData();
-                    deleteMessageId       = getServiceType();
+                    secondDeleteMessageId   = wrongData();
+                    deleteMessageId         = getServiceType();
                 }
                 return COMEBACK;
             case SET_SERVICE:
@@ -80,8 +80,8 @@ public class id008_Service extends Command {
                 delete();
                 if (hasCallbackQuery()) {
                     if (isButton(Const.JOIN_BUTTON)) {
-                        registrationService.setCome(false);
-                        factory            .getRegistrationServiceDao().insert(registrationService);
+                        factory.getRegistrationServiceDao().insert(registrationService);
+                        sendMessageToSpec();
                         deleteMessageId    = done();
                         return EXIT;
                     } else if (isButton(Const.QUEST_BUTTON)) {
@@ -131,7 +131,7 @@ public class id008_Service extends Command {
                     for (QuestMessage questMessage : allMessage) {
                         for (String answerDb : questMessage.getRange().split(",")) {
                             if (answerDb.equals(answer)) {
-                                surveyAnswer = new ServiceSurveyAnswer();
+                                surveyAnswer    = new ServiceSurveyAnswer();
                                 surveyAnswer.setButton(answer);
                                 surveyAnswer.setChatId(chatId);
                                 surveyAnswer.setSurveyId(question.getId());
@@ -159,7 +159,7 @@ public class id008_Service extends Command {
         return EXIT;
     }
 
-    private int    getServiceType()      throws TelegramApiException {
+    private int     getServiceType()        throws TelegramApiException {
         list.clear();
         serviceTypes = factory.getServiceTypeDao().getAll();
         serviceTypes.forEach((e) -> list.add(e.getName()));
@@ -167,7 +167,7 @@ public class id008_Service extends Command {
         return toDeleteKeyboard(sendMessageWithKeyboard(getText(Const.SERVICE_TYPE_MESSAGE), buttonsLeaf.getListButton()));
     }
 
-    private int    getService()          throws TelegramApiException {
+    private int     getService()            throws TelegramApiException {
         list.clear();
         services    = factory.getServiceDao().getAll(serviceTypeId);
         services.forEach((e) -> list.add(e.getFullName()));
@@ -175,13 +175,15 @@ public class id008_Service extends Command {
         return toDeleteKeyboard(sendMessageWithKeyboard(getText(Const.CHOOSE_SPEC_MESSAGE), buttonsLeaf.getListButton()));
     }
 
-    private int    wrongData()           throws TelegramApiException { return botUtils.sendMessage(Const.WRONG_DATA_TEXT, chatId); }
+    private int     sendMessageToSpec()     throws TelegramApiException { return botUtils.sendMessage(String.format(getText(Const.JOINED_TO_SERVICE_MESSAGE), userDao.getUserByChatId(registrationService.getChatId()).getFullName()), service.getServiceTeacherId()); }
 
-    private int    registrationMessage() throws TelegramApiException { return botUtils.sendMessage(Const.GO_TO_REGISTRATION_MESSAGE, chatId); }
+    private int     wrongData()             throws TelegramApiException { return botUtils.sendMessage(Const.WRONG_DATA_TEXT, chatId); }
 
-    private int    done()                throws TelegramApiException { return botUtils.sendMessage(Const.DONE_JOIN_MESSAGE, chatId); }
+    private int     registrationMessage()   throws TelegramApiException { return botUtils.sendMessage(Const.GO_TO_REGISTRATION_MESSAGE, chatId); }
 
-    private void   delete() {
+    private int     done()                  throws TelegramApiException { return botUtils.sendMessage(Const.DONE_JOIN_MESSAGE, chatId); }
+
+    private void    delete() {
         deleteMessage(updateMessageId);
         deleteMessage(deleteMessageId);
         deleteMessage(secondDeleteMessageId);

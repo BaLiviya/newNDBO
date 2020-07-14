@@ -48,7 +48,7 @@ public class id005_Courses extends Command {
                 registrationHandling                = new RegistrationHandling();
                 registrationHandling.setRegistrationDate(new Date());
                 registrationHandling.setChatId(chatId);
-//                registrationHandling.setIin(Long.parseLong(userDao.getUserByChatId(chatId).getIin())); // TODO: 10.07.2020 исправить баг с ИИН
+//                registrationHandling.setIin(Long.parseLong(userDao.getUserByChatId(chatId).getIin())); // TODO: 10.07.2020 исправить ИИН
                 deleteMessageId                     = getCoursesType();
                 waitingType                         = WaitingType.SET_COURSES_TYPE;
                 return COMEBACK;
@@ -94,10 +94,9 @@ public class id005_Courses extends Command {
                 if (hasCallbackQuery()) {
                     if (isButton(Const.JOIN_BUTTON)) {
                         registrationHandling.setIdHandling(coursesNames.get(courseId).getId());
-                        registrationHandling.setCome(false);
                         factory.getRegistrationHandlingDao().insertCourse(registrationHandling);
+                        sendMessageToSpec();
                         deleteMessageId             = done();
-                        // TODO: 09.07.2020 тут сделать отправления оповещения специалисту
                         return EXIT;
                     } else if (isButton(Const.QUEST_BUTTON)) {
                         currentLanguage             = LanguageService.getLanguage(chatId);
@@ -191,6 +190,8 @@ public class id005_Courses extends Command {
         buttonsLeaf     = new ButtonsLeaf(list);
         return toDeleteKeyboard(sendMessageWithKeyboard(getText(Const.CHOOSE_SPEC_MESSAGE), buttonsLeaf.getListButton()));
     }
+
+    private int     sendMessageToSpec()                 throws TelegramApiException { return botUtils.sendMessage(String.format(getText(Const.JOINED_TO_SERVICE_MESSAGE), userDao.getUserByChatId(registrationHandling.getChatId()).getFullName()), handling.getHandlingTeacherId()); }
 
     private int     wrongData()                         throws TelegramApiException { return botUtils.sendMessage(Const.WRONG_DATA_TEXT, chatId); }
 

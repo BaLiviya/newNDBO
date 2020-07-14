@@ -38,20 +38,20 @@ public class id022_Consultation extends Command {
     private int                     secondDeleteMessageId;
 
     @Override
-    public boolean execute() throws TelegramApiException {
+    public boolean execute()                                throws TelegramApiException {
         switch (waitingType) {
             case START:
                 if(!isRecipient()) {
-                    deleteMessageId      = registrationMessage();
+                    deleteMessageId         = registrationMessage();
                     return EXIT;
                 }
                 deleteMessage(updateMessageId);
-                registrationHandling    = new RegistrationHandling();
+                registrationHandling        = new RegistrationHandling();
                 registrationHandling    .setRegistrationDate(new Date());
                 registrationHandling    .setChatId(chatId);
-                registrationHandling    .setIin(Long.parseLong(userDao.getUserByChatId(chatId).getIin()));
-                deleteMessageId         = getConsultationTypes();
-                waitingType             = WaitingType.SET_CONSULTATION_TYPE;
+//                registrationHandling    .setIin(Long.parseLong(userDao.getUserByChatId(chatId).getIin()));
+                deleteMessageId             = getConsultationTypes();
+                waitingType                 = WaitingType.SET_CONSULTATION_TYPE;
                 return COMEBACK;
             case SET_CONSULTATION_TYPE:
                 delete();
@@ -82,9 +82,7 @@ public class id022_Consultation extends Command {
                     handling                  = handlingList.get(Integer.parseInt(updateMessageText));
                     String formatMessage      = getText(Const.INFORMATION_CONSULTATION_TEXT_MESSAGE);
                     String result             = String.format(formatMessage, consultationNames.get(consultationNameIdFromList).getName(), handling.getText());
-                    if (handling.getPhoto()  != null) {
-                        secondDeleteMessageId = bot.execute(new SendPhoto().setChatId(chatId).setPhoto(handling.getPhoto())).getMessageId();
-                    }
+                    if (handling.getPhoto()  != null) secondDeleteMessageId = bot.execute(new SendPhoto().setChatId(chatId).setPhoto(handling.getPhoto())).getMessageId();
                     deleteMessageId           = sendMessageWithKeyboard(result, Const.WRITE_IN_SERVICE_KEYBOARD);
                     waitingType               = WaitingType.SET_CONSULTATION;
                 } else {
@@ -97,8 +95,9 @@ public class id022_Consultation extends Command {
                 if (hasCallbackQuery()) {
                     if (isButton(Const.JOIN_BUTTON)) {
                         registrationHandling.setIdHandling(handling.getId());
-                        registrationHandling.setCome(false);
+//                        registrationHandling.setCome(false);
                         factory             .getRegistrationHandlingDao().insertConsultation(registrationHandling);
+                        sendMessageToSpec();
                         deleteMessageId     = done();
                         return EXIT;
                     } else if (isButton(Const.QUEST_BUTTON)) {
@@ -176,7 +175,7 @@ public class id022_Consultation extends Command {
         return EXIT;
     }
 
-    private int  getConsultationTypes()                  throws TelegramApiException {
+    private int  getConsultationTypes()                     throws TelegramApiException {
         list.clear();
         consultationTypes = factory.getCoursesTypeDao().getAllConsultation();
         consultationTypes.forEach((e) -> list.add(e.getName()));
@@ -184,7 +183,7 @@ public class id022_Consultation extends Command {
         return toDeleteKeyboard(sendMessageWithKeyboard(getText(Const.CONSULTATION_TYPE_MESSAGE), buttonsLeaf.getListButton()));
     }
 
-    private int  getConsultationName(int consultationId) throws TelegramApiException {
+    private int  getConsultationName(int consultationId)    throws TelegramApiException {
         list.clear();
         consultationNames = factory.getCoursesNameDao().getAllConsultation(consultationId);
         consultationNames.forEach((e) -> list.add(e.getName()));
@@ -192,7 +191,7 @@ public class id022_Consultation extends Command {
         return toDeleteKeyboard(sendMessageWithKeyboard(getText(Const.CONSULTATION_TYPE_MESSAGE), buttonsLeaf.getListButton()));
     }
 
-    private int  getHandling()                           throws TelegramApiException {
+    private int  getHandling()                              throws TelegramApiException {
         list.clear();
         handlingList    = handlingDao.getAllConsultation(consultationNameId);
         handlingList.forEach((e) -> list.add(e.getFullName()));
@@ -200,17 +199,13 @@ public class id022_Consultation extends Command {
         return toDeleteKeyboard(sendMessageWithKeyboard(getText(Const.CHOOSE_SPEC_MESSAGE), buttonsLeaf.getListButton()));
     }
 
-    private int  registrationMessage()                   throws TelegramApiException {
-        return botUtils.sendMessage(Const.GO_TO_REGISTRATION_MESSAGE, chatId);
-    }
+    private int  sendMessageToSpec()                        throws TelegramApiException { return botUtils.sendMessage(String.format(getText(Const.JOINED_TO_SERVICE_MESSAGE), userDao.getUserByChatId(registrationHandling.getChatId()).getFullName()), handling.getHandlingTeacherId()); }
 
-    private int  wrongData()                             throws TelegramApiException {
-        return botUtils.sendMessage(Const.WRONG_DATA_TEXT, chatId);
-    }
+    private int  registrationMessage()                      throws TelegramApiException { return botUtils.sendMessage(Const.GO_TO_REGISTRATION_MESSAGE, chatId); }
 
-    private int  done()                                  throws TelegramApiException {
-        return botUtils.sendMessage(Const.DONE_JOIN_MESSAGE, chatId);
-    }
+    private int  wrongData()                                throws TelegramApiException { return botUtils.sendMessage(Const.WRONG_DATA_TEXT, chatId); }
+
+    private int  done()                                     throws TelegramApiException { return botUtils.sendMessage(Const.DONE_JOIN_MESSAGE, chatId); }
 
     private void delete() {
         deleteMessage(updateMessageId);

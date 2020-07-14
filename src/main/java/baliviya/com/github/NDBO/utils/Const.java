@@ -192,4 +192,5 @@ public class Const {
     public static final int UPDATE_REGISTRATION_MESSAGE             = 1150;
     public static final int SELECT_EMPLOYEE_FROM_HANDLING_MESSAGE   = 1151;
     public static final int SEND_USER_FROM_SPEC_MESSAGE             = 1152;
+    public static final int JOINED_TO_SERVICE_MESSAGE               = 1153;
 }
