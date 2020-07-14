@@ -71,6 +71,8 @@ public class CommandFactory {
                 return new id028_Kpi();
             case 29:
                 return new id029_Reminder();
+            case 31:
+                return new id031_StructureShowInfo();
         }
         return null;
     }
