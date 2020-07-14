@@ -45,7 +45,7 @@ public class id006_Training extends Command {
                 registrationHandling            = new RegistrationHandling();
                 registrationHandling.setRegistrationDate(new Date());
                 registrationHandling.setChatId(chatId);
-//                registrationHandling.setIin(Long.parseLong(userDao.getUserByChatId(chatId).getIin()));
+                registrationHandling.setIin(Long.parseLong(recipientDao.getRecipientByChatId(chatId).getIin()));
                 deleteMessageId                 = getTrainingName();
                 waitingType                     = WaitingType.SET_TRAINING_NAME;
                 return COMEBACK;

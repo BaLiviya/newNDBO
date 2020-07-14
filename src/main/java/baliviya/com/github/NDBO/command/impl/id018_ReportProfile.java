@@ -69,11 +69,11 @@ public class id018_ReportProfile extends Command {
 
     private int     sendEndDate()   throws TelegramApiException { return toDeleteKeyboard(sendMessageWithKeyboard(1056, dateKeyboard.getCalendarKeyboard())); }
 
-    private String  sendLightReport() { return String.format("Количество анкет: %s", recipientDao.getCount()); }
-
     private void    sendReport()    throws TelegramApiException {
         int preview                         = sendMessage("Отчет подготавливается...");
         ProfileReportService reportService  = new ProfileReportService();
         reportService.sendProfileReport(chatId, bot, start, end, preview);
     }
+
+    private String  sendLightReport() { return String.format("Количество анкет: %s", recipientDao.getCount()); }
 }

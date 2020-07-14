@@ -48,7 +48,7 @@ public class id005_Courses extends Command {
                 registrationHandling                = new RegistrationHandling();
                 registrationHandling.setRegistrationDate(new Date());
                 registrationHandling.setChatId(chatId);
-//                registrationHandling.setIin(Long.parseLong(userDao.getUserByChatId(chatId).getIin())); // TODO: 10.07.2020 исправить ИИН
+                registrationHandling.setIin(Long.parseLong(recipientDao.getRecipientByChatId(chatId).getIin()));
                 deleteMessageId                     = getCoursesType();
                 waitingType                         = WaitingType.SET_COURSES_TYPE;
                 return COMEBACK;

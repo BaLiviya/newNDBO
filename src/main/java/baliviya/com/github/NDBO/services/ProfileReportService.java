@@ -56,8 +56,6 @@ public class ProfileReportService {
         }
     }
 
-    // 7768623248 бипек авто
-
     private void            sendReport(long chatId, DefaultAbsSender bot, Date dateBegin, Date dateEnd, int messagePrevReport) throws TelegramApiException, IOException {
         sheets                      = workbook.createSheet("Анкета");
         sheet                       = sheets;

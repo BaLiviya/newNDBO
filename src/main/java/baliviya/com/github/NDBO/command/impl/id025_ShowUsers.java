@@ -100,8 +100,8 @@ public class id025_ShowUsers extends Command {
         sheet   .getRow(rowIndex)    .getCell(CellIndex)     .setCellStyle(styleTitle);
         sheets  .getRow(rowIndex)    .createCell(++CellIndex).setCellValue("Данные telegram");
         sheet   .getRow(rowIndex)    .getCell(CellIndex)     .setCellStyle(styleTitle);
-        sheets  .getRow(rowIndex)    .createCell(++CellIndex).setCellValue("ИИН");
-        sheet   .getRow(rowIndex)    .getCell(CellIndex)     .setCellStyle(styleTitle);
+//        sheets  .getRow(rowIndex)    .createCell(++CellIndex).setCellValue("ИИН");
+//        sheet   .getRow(rowIndex)    .getCell(CellIndex)     .setCellStyle(styleTitle);
         sheets  .getRow(rowIndex)    .createCell(++CellIndex).setCellValue("Статус");
         sheet   .getRow(rowIndex)    .getCell(CellIndex)     .setCellStyle(styleTitle);
         for (User entity : allUsers) {
@@ -112,12 +112,12 @@ public class id025_ShowUsers extends Command {
             sheet   .getRow(rowIndex)     .getCell(CellIndex)        .setCellStyle(style);
             sheets  .getRow(rowIndex)     .createCell(++CellIndex)   .setCellValue(entity.getUserName());
             sheet   .getRow(rowIndex)     .getCell(CellIndex)        .setCellStyle(style);
-            sheets  .getRow(rowIndex)     .createCell(++CellIndex)   .setCellValue(entity.getIin());
-            sheet   .getRow(rowIndex)     .getCell(CellIndex)        .setCellStyle(style);
+//            sheets  .getRow(rowIndex)     .createCell(++CellIndex)   .setCellValue(entity.getIin());
+//            sheet   .getRow(rowIndex)     .getCell(CellIndex)        .setCellStyle(style);
             sheets  .getRow(rowIndex)     .createCell(++CellIndex)   .setCellValue(entity.getStatus());
             sheet   .getRow(rowIndex)     .getCell(CellIndex)        .setCellStyle(style);
         }
-        String[] splitWidth = "13200;13200;13200;13200;13200".split(";");
+        String[] splitWidth = "13200;13200;13200;13200".split(";");
         for (int i = 0; i < splitWidth.length; i++) {
             if (splitWidth[i].equalsIgnoreCase("auto")) {
                 sheets.autoSizeColumn(i);

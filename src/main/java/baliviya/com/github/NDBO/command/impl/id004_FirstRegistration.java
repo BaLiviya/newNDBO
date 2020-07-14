@@ -28,21 +28,40 @@ public class id004_FirstRegistration extends Command {
         switch (waitingType) {
             case START:
                 deleteMessage(updateMessageId);
-                user          = userDao.getUserByChatId(chatId);
+                user                = userDao.getUserByChatId(chatId);
                 if (!isRecipient()) {
-                    recipient = new Recipient();
+                    recipient       = new Recipient();
                     recipient.setChatId(chatId);
                     recipient.setRegistrationDate(new Date());
                     recipient.setFullName   (user.getFullName());
                     recipient.setPhoneNumber(user.getPhone());
-                    recipient.setIin        (user.getIin());
+//                    recipient.setIin        (user.getIin());
                     recipient.setStatus     (user.getStatus());
                 } else {
-                    recipient   = recipientDao.getRecipientByChatId(chatId);
-                    isUpdate    = true;
+                    recipient       = recipientDao.getRecipientByChatId(chatId);
+                    isUpdate        = true;
                 }
-                deleteMessageId = getAddress();
-                waitingType     = WaitingType.SET_ADDRESS;
+                 deleteMessageId    = getIin();
+                 waitingType        = WaitingType.SET_IIN;
+//                deleteMessageId = getAddress();
+//                waitingType     = WaitingType.SET_ADDRESS;
+                return COMEBACK;
+            case SET_IIN:
+                try {
+                    Long.parseLong(update.getMessage().getText());
+                } catch (NumberFormatException e) {
+                    wrongIinNotNumber();
+                    getIin();
+                    return COMEBACK;
+                }
+                if (update.hasMessage() && update.getMessage().hasText() && update.getMessage().getText().length() == 12) {
+                    recipient.setIin(update.getMessage().getText());
+                    deleteMessageId = getAddress();
+                    waitingType     = WaitingType.SET_ADDRESS;
+                } else {
+                    wrongData();
+                    getIin();
+                }
                 return COMEBACK;
             case SET_ADDRESS:
                 delete();
@@ -467,6 +486,10 @@ public class id004_FirstRegistration extends Command {
     }
 
     private int     wrongData()                     throws TelegramApiException { return botUtils.sendMessage(Const.WRONG_DATA_TEXT, chatId); }
+
+    private int     getIin()                        throws TelegramApiException { return botUtils.sendMessage(Const.SET_IIN_MESSAGE, chatId); }
+
+    private int     wrongIinNotNumber()             throws TelegramApiException { return botUtils.sendMessage(Const.IIN_WRONG_MESSAGE, chatId); }
 
     private int     getAddress()                    throws TelegramApiException {
         if (isUpdate) {

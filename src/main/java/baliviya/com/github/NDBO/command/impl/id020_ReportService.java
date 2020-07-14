@@ -16,7 +16,7 @@ public class id020_ReportService extends Command {
     private Date end;
 
     @Override
-    public boolean execute() throws TelegramApiException {
+    public boolean  execute()       throws TelegramApiException {
         if (!isAdmin() && !isMainAdmin()) {
             sendMessage(Const.NO_ACCESS);
             return EXIT;
@@ -24,9 +24,9 @@ public class id020_ReportService extends Command {
         switch (waitingType) {
             case START:
                 deleteMessage(updateMessageId);
-                dateKeyboard = new DateKeyboard();
+                dateKeyboard    = new DateKeyboard();
                 sendStartDate();
-                waitingType = WaitingType.START_DATE;
+                waitingType     = WaitingType.START_DATE;
                 return COMEBACK;
             case START_DATE:
                 deleteMessage(updateMessageId);
@@ -35,7 +35,7 @@ public class id020_ReportService extends Command {
                         sendStartDate();
                         return COMEBACK;
                     }
-                    start = dateKeyboard.getDateDate(updateMessageText);
+                    start       = dateKeyboard.getDateDate(updateMessageText);
                     start.setHours(0);
                     start.setMinutes(0);
                     start.setMinutes(0);
@@ -50,7 +50,7 @@ public class id020_ReportService extends Command {
                         sendStartDate();
                         return COMEBACK;
                     }
-                    end = dateKeyboard.getDateDate(updateMessageText);
+                    end         = dateKeyboard.getDateDate(updateMessageText);
                     end.setHours(23);
                     end.setMinutes(59);
                     end.setSeconds(59);
@@ -62,17 +62,13 @@ public class id020_ReportService extends Command {
         return EXIT;
     }
 
-    private int sendStartDate() throws TelegramApiException {
-        return toDeleteKeyboard(sendMessageWithKeyboard(getText(1055), dateKeyboard.getCalendarKeyboard()));
-    }
+    private int     sendStartDate() throws TelegramApiException { return toDeleteKeyboard(sendMessageWithKeyboard(getText(1055), dateKeyboard.getCalendarKeyboard())); }
 
-    private int sendEndDate() throws TelegramApiException {
-        return toDeleteKeyboard(sendMessageWithKeyboard(getText(1056), dateKeyboard.getCalendarKeyboard()));
-    }
+    private int     sendEndDate()   throws TelegramApiException { return toDeleteKeyboard(sendMessageWithKeyboard(getText(1056), dateKeyboard.getCalendarKeyboard())); }
 
-    private void sendReport() throws TelegramApiException {
-        int preview = sendMessage("Отчет подготавливается...");
-        ServiceReportService reportService = new ServiceReportService();
+    private void    sendReport()    throws TelegramApiException {
+        int preview                         = sendMessage("Отчет подготавливается...");
+        ServiceReportService reportService  = new ServiceReportService();
         reportService.sendServiceReport(chatId, bot, start, end, preview);
     }
 }

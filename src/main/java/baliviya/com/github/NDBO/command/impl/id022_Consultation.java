@@ -49,7 +49,7 @@ public class id022_Consultation extends Command {
                 registrationHandling        = new RegistrationHandling();
                 registrationHandling    .setRegistrationDate(new Date());
                 registrationHandling    .setChatId(chatId);
-//                registrationHandling    .setIin(Long.parseLong(userDao.getUserByChatId(chatId).getIin()));
+                registrationHandling    .setIin(Long.parseLong(recipientDao.getRecipientByChatId(chatId).getIin()));
                 deleteMessageId             = getConsultationTypes();
                 waitingType                 = WaitingType.SET_CONSULTATION_TYPE;
                 return COMEBACK;
