@@ -16,7 +16,7 @@ public class id016_ReportSuggestion extends Command {
     private Date end;
 
     @Override
-    public boolean execute() throws TelegramApiException {
+    public boolean  execute()       throws TelegramApiException {
         if (!isAdmin() && !isMainAdmin()) {
             sendMessage(Const.NO_ACCESS);
             return EXIT;
@@ -64,21 +64,15 @@ public class id016_ReportSuggestion extends Command {
         return EXIT;
     }
 
-    private int sendStartDate() throws TelegramApiException {
-        return toDeleteKeyboard(sendMessageWithKeyboard(sendLightReport() + getText(1055), dateKeyboard.getCalendarKeyboard()));
-    }
+    private int     sendStartDate() throws TelegramApiException { return toDeleteKeyboard(sendMessageWithKeyboard(sendLightReport() + getText(1055), dateKeyboard.getCalendarKeyboard())); }
 
-    private int sendEndDate() throws TelegramApiException {
-        return toDeleteKeyboard(sendMessageWithKeyboard(1056, dateKeyboard.getCalendarKeyboard()));
-    }
+    private int     sendEndDate()   throws TelegramApiException { return toDeleteKeyboard(sendMessageWithKeyboard(1056, dateKeyboard.getCalendarKeyboard())); }
 
-    private String sendLightReport() {
-       return String.format("Кол-во жалоб: %s ", suggestionDao.getCount());
-    }
+    private String  sendLightReport() { return String.format("Кол-во жалоб: %s ", suggestionDao.getCount()); }
 
-    private void sendReport() throws TelegramApiException {
-        int preview = sendMessage("Отчет подготавливается...");
-        SuggestionReportService reportService = new SuggestionReportService();
+    private void    sendReport()    throws TelegramApiException {
+        int preview                             = sendMessage("Отчет подготавливается...");
+        SuggestionReportService reportService   = new SuggestionReportService();
         reportService.sendSuggestionReport(chatId, bot, start, end, preview);
     }
 }

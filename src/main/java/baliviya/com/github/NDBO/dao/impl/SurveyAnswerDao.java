@@ -10,30 +10,30 @@ import java.util.List;
 
 public class SurveyAnswerDao extends AbstractDao<SurveyAnswer> {
 
-    public void insert(SurveyAnswer surveyAnswer) {
+    public void                 insert(SurveyAnswer surveyAnswer) {
         int id = getNextId("SURVEY_ANSWERS");
         sql = "INSERT INTO " + Const.TABLE_NAME + ".SURVEY_ANSWERS (ID, SURVEY_ID, CHAT_ID, BUTTON, TEXT) VALUES ( ?,?,?,?,? )";
         getJdbcTemplate().update(sql, setParam(id, surveyAnswer.getSurveyId(), surveyAnswer.getChatId(), surveyAnswer.getButton(), surveyAnswer.getText()));
         surveyAnswer.setId(id);
     }
 
-    public void update(int id, String text) {
+    public void                 update(int id, String text) {
         sql = "UPDATE " + Const.TABLE_NAME + ".SURVEY_ANSWERS SET TEXT = ? WHERE ID = ?";
         getJdbcTemplate().update(sql, text, id);
     }
 
-    public void deleteByQuestId(int questId) {
+    public void                 deleteByQuestId(int questId) {
         sql = "DELETE FROM " + Const.TABLE_NAME + ".SURVEY_ANSWERS WHERE SURVEY_ID = ?";
         getJdbcTemplate().update(sql, questId);
     }
 
-    public List<SurveyAnswer> getAll(int surveyId) {
+    public List<SurveyAnswer>   getAll(int surveyId) {
         sql = "SELECT * FROM " + Const.TABLE_NAME + ".SURVEY_ANSWERS WHERE SURVEY_ID = ? ORDER BY ID DESC";
         return getJdbcTemplate().query(sql, setParam(surveyId), this::mapper);
     }
 
     @Override
-    protected SurveyAnswer mapper(ResultSet rs, int index) throws SQLException {
+    protected SurveyAnswer      mapper(ResultSet rs, int index) throws SQLException {
         SurveyAnswer surveyAnswer = new SurveyAnswer();
         surveyAnswer.setId(rs.getInt(1));
         surveyAnswer.setSurveyId(rs.getInt(2));

@@ -9,7 +9,7 @@ import java.sql.SQLException;
 
 public class LanguageUserDao extends AbstractDao<LanguageUser> {
 
-    public void insertOrUpdate(LanguageUser languageUser) {
+    public void             insertOrUpdate(LanguageUser languageUser) {
         if (isRegistered(languageUser.getChatId())) {
             update(languageUser);
         } else {
@@ -17,17 +17,17 @@ public class LanguageUserDao extends AbstractDao<LanguageUser> {
         }
     }
 
-    private void insert(LanguageUser languageUser) {
+    private void            insert(LanguageUser languageUser) {
         sql = "INSERT INTO LANG_USER (CHAT_ID, LANG_ID) VALUES (?,?)";
         getJdbcTemplate().update(sql, languageUser.getChatId(), languageUser.getLanguage().getId());
     }
 
-    private void update(LanguageUser languageUser) {
+    private void            update(LanguageUser languageUser) {
         sql = "UPDATE LANG_USER SET LANG_ID = ? WHERE CHAT_ID = ?";
         getJdbcTemplate().update(sql, languageUser.getLanguage().getId(), languageUser.getChatId());
     }
 
-    public LanguageUser getByChatId(long chatId) {
+    public LanguageUser     getByChatId(long chatId) {
         sql = "SELECT * FROM LANG_USER WHERE CHAT_ID = ?";
         LanguageUser languageUser = null;
         try {
@@ -37,7 +37,7 @@ public class LanguageUserDao extends AbstractDao<LanguageUser> {
         return languageUser;
     }
 
-    public boolean isRegistered(long chatId) {
+    public boolean          isRegistered(long chatId) {
         sql = "SELECT COUNT(*) FROM LANG_USER WHERE CHAT_ID = ?";
         if (getJdbcTemplate().queryForObject(sql, setParam(chatId), Integer.class) != 0) {
             return true;
@@ -46,7 +46,7 @@ public class LanguageUserDao extends AbstractDao<LanguageUser> {
     }
 
     @Override
-    protected LanguageUser mapper(ResultSet rs, int index) throws SQLException {
+    protected LanguageUser  mapper(ResultSet rs, int index) throws SQLException {
         LanguageUser languageUser = new LanguageUser();
         languageUser.setChatId(rs.getLong(1));
         languageUser.setLanguage(Language.getById(rs.getInt(2)));

@@ -10,18 +10,18 @@ import java.util.List;
 
 public class CoursesTypeDao extends AbstractDao<CoursesType> {
 
-    public List<CoursesType> getAll() {
+    public List<CoursesType>    getAll() {
         sql = "SELECT * FROM " + Const.TABLE_NAME + ".COURSES_TYPE";
         return getJdbcTemplate().query(sql, this::mapper);
     }
 
-    public List<CoursesType> getAllConsultation() {
+    public List<CoursesType>    getAllConsultation() {
         sql = "SELECT * FROM " + Const.TABLE_NAME + ".CONSULTATION_TYPE";
         return getJdbcTemplate().query(sql, this::mapper);
     }
 
     @Override
-    protected CoursesType mapper(ResultSet rs, int index) throws SQLException {
+    protected CoursesType       mapper(ResultSet rs, int index) throws SQLException {
         CoursesType coursesType = new CoursesType();
         coursesType.setId(rs.getInt(1));
         coursesType.setName(rs.getString(2));

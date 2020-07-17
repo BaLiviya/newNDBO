@@ -39,7 +39,7 @@ public class SuggestionReportService {
     private Sheet         sheets;
     private Sheet         sheet;
 
-    public void sendSuggestionReport(long chatId, DefaultAbsSender bot, Date dateBegin, Date dateEnd, int messagePrevReport) {
+    public void             sendSuggestionReport(long chatId, DefaultAbsSender bot, Date dateBegin, Date dateEnd, int messagePrevReport) {
         currentLanguage = LanguageService.getLanguage(chatId);
         try {
             sendCompReport(chatId, bot, dateBegin, dateEnd, messagePrevReport);
@@ -53,19 +53,19 @@ public class SuggestionReportService {
         }
     }
 
-    private void sendCompReport(long chatId, DefaultAbsSender bot, Date dateBegin, Date dateEnd, int messagePrevReport) throws TelegramApiException, IOException {
-        sheets = workbook.createSheet("Жалобы");
-        sheet = workbook.getSheetAt(0);
-        List<Suggestion> reports = daoFactory.getSuggestionDao().getSuggestionsByTime(dateBegin, dateEnd);
+    private void            sendCompReport(long chatId, DefaultAbsSender bot, Date dateBegin, Date dateEnd, int messagePrevReport) throws TelegramApiException, IOException {
+        sheets                      = workbook.createSheet("Жалобы");
+        sheet                       = workbook.getSheetAt(0);
+        List<Suggestion> reports    = daoFactory.getSuggestionDao().getSuggestionsByTime(dateBegin, dateEnd);
         if (reports == null || reports.size() == 0) {
             bot.execute(new DeleteMessage(chatId, messagePrevReport));
             bot.execute(new SendMessage(chatId, "За выбранный период заявки отсутствуют"));
             return;
         }
-        BorderStyle thin = BorderStyle.THIN;
-        short black = IndexedColors.BLACK.getIndex();
-        XSSFCellStyle styleTitle = setStyle(workbook, thin, black, style);
-        int rowIndex = 0;
+        BorderStyle thin            = BorderStyle.THIN;
+        short black                 = IndexedColors.BLACK.getIndex();
+        XSSFCellStyle styleTitle    = setStyle(workbook, thin, black, style);
+        int rowIndex                = 0;
         createTitle(styleTitle, rowIndex, Arrays.asList("№;ФИО;Номер телефона;Текст;Дата".split(Const.SPLIT)));
         List<List<String>> info = reports.stream().map(x -> {
             List<String> list = new ArrayList<>();
@@ -80,7 +80,7 @@ public class SuggestionReportService {
         sendFile(chatId, bot, dateBegin, dateEnd);
     }
 
-    private void addInfo(List<List<String>> reports, int rowIndex) {
+    private void            addInfo(List<List<String>> reports, int rowIndex) {
         int cellIndex;
         for (List<String> report : reports) {
             sheets.createRow(++rowIndex);
@@ -94,29 +94,29 @@ public class SuggestionReportService {
         sheets.autoSizeColumn(cellIndex++);
     }
 
-    private void createTitle(XSSFCellStyle styleTitle, int rowIndex, List<String> title) {
+    private void            createTitle(XSSFCellStyle styleTitle, int rowIndex, List<String> title) {
         sheets.createRow(rowIndex);
         insertToRow(rowIndex, title, styleTitle);
     }
 
-    private void insertToRow(int row, List<String> cellValues, CellStyle cellStyle) {
+    private void            insertToRow(int row, List<String> cellValues, CellStyle cellStyle) {
         int cellIndex = 0;
         for (String cellValue : cellValues) {
             addCellValue(row, cellIndex++, cellValue, cellStyle);
         }
     }
 
-    private void addCellValue(int rowIndex, int cellIndex, String cellValue, CellStyle cellStyle) {
+    private void            addCellValue(int rowIndex, int cellIndex, String cellValue, CellStyle cellStyle) {
         sheets.getRow(rowIndex).createCell(cellIndex).setCellValue(getString(cellValue));
         sheet.getRow(rowIndex).getCell(cellIndex).setCellStyle(cellStyle);
     }
 
-    private String getString(String nullable) {
+    private String          getString(String nullable) {
         if (nullable == null) return "";
         return nullable;
     }
 
-    private XSSFCellStyle setStyle(XSSFWorkbook workbook, BorderStyle thin, short black, XSSFCellStyle style) {
+    private XSSFCellStyle   setStyle(XSSFWorkbook workbook, BorderStyle thin, short black, XSSFCellStyle style) {
         style.setWrapText(true);
         style.setAlignment(HorizontalAlignment.CENTER);
         style.setVerticalAlignment(VerticalAlignment.CENTER);
@@ -147,7 +147,7 @@ public class SuggestionReportService {
         return styleTitle;
     }
 
-    private void sendFile(long chatId, DefaultAbsSender bot, Date dateBegin, Date dateEnd) throws IOException, TelegramApiException {
+    private void            sendFile(long chatId, DefaultAbsSender bot, Date dateBegin, Date dateEnd) throws IOException, TelegramApiException {
         String fileName = "Жалобы за: " + DateUtil.getDayDate(dateBegin) + " - " + DateUtil.getDayDate(dateEnd) + ".xlsx";
         String path = "C:\\" + fileName;
         path += new Date().getTime();
@@ -159,7 +159,7 @@ public class SuggestionReportService {
         sendFile(chatId, bot, fileName, path);
     }
 
-    private void sendFile(long chatId, DefaultAbsSender bot, String fileName, String path) throws IOException, TelegramApiException {
+    private void            sendFile(long chatId, DefaultAbsSender bot, String fileName, String path) throws IOException, TelegramApiException {
         File file = new File(path);
         try (FileInputStream fileInputStream = new FileInputStream(file)) {
             bot.execute(new SendDocument().setChatId(chatId).setDocument(fileName, fileInputStream));

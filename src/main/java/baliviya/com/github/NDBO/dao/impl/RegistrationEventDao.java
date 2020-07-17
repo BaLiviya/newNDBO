@@ -9,12 +9,12 @@ import java.sql.SQLException;
 
 public class RegistrationEventDao extends AbstractDao<RegistrationEvent> {
 
-    public void insert(RegistrationEvent event) {
+    public void                 insert(RegistrationEvent event) {
         sql = "INSERT INTO " + Const.TABLE_NAME + ".REGISTRATION_EVENT(CHAT_ID, EVENT_ID, REGISTRATION_DATE, IS_COME) VALUES ( ?,?,?,? )";
         getJdbcTemplate().update(sql, event.getChatId(), event.getEventId(), event.getRegistrationDate(), event.isCome());
     }
 
-    public boolean isJoinToEvent(long chatId, long eventId) {
+    public boolean              isJoinToEvent(long chatId, long eventId) {
         sql = "SELECT count(*) FROM " + Const.TABLE_NAME + ".REGISTRATION_EVENT WHERE CHAT_ID = ? AND EVENT_ID = ?";
         return getJdbcTemplate().queryForObject(sql, setParam(chatId, eventId), Integer.class) > 0;
     }

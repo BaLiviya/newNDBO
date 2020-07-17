@@ -193,4 +193,8 @@ public class Const {
     public static final int SELECT_EMPLOYEE_FROM_HANDLING_MESSAGE   = 1151;
     public static final int SEND_USER_FROM_SPEC_MESSAGE             = 1152;
     public static final int JOINED_TO_SERVICE_MESSAGE               = 1153;
+    public static final int SEND_IIN_FROM_ADMIN_MESSAGE             = 1154;
+    public static final int CHOOSE_DATE_MESSAGE                     = 1155;
+    public static final int SERVICE_LIST_EMPTY_MESSAGE              = 1156;
+    public static final int SERVICE_LIST_MESSAGE                    = 1157;
 }

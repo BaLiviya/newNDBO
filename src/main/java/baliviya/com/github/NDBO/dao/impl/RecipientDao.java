@@ -62,7 +62,6 @@ public class RecipientDao extends AbstractDao<Recipient> {
     }
 
     public List<Recipient>  getRecipientByTime(Date dateBegin, Date deadline) {
-//        sql = "SELECT * FROM " + Const.TABLE_NAME + ".RECIPIENTS WHERE REGISTRATION_DATE BETWEEN to_date(?,'YYYY-MM-DD') AND to_date(?, 'YYYY-MM-DD') ORDER BY ID";
         sql = "SELECT * FROM " + Const.TABLE_NAME + ".RECIPIENTS WHERE REGISTRATION_DATE BETWEEN ? AND ? ORDER BY ID";
         return getJdbcTemplate().query(sql, setParam(dateBegin, deadline), this::mapper);
     }

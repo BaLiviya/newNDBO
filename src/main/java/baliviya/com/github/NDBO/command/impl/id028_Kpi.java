@@ -1,6 +1,7 @@
 package baliviya.com.github.NDBO.command.impl;
 
 import baliviya.com.github.NDBO.command.Command;
+import baliviya.com.github.NDBO.entity.custom.RegistrationHandling;
 import baliviya.com.github.NDBO.entity.enums.WaitingType;
 import baliviya.com.github.NDBO.utils.ButtonsLeaf;
 import baliviya.com.github.NDBO.utils.Const;
@@ -12,10 +13,12 @@ import java.util.List;
 
 public class id028_Kpi extends Command {
 
-    private List<String> list;
-    private ButtonsLeaf  buttonsLeaf;
-    private List<String> handlingList;
-    private String       handling;
+    private List<String>            list = new ArrayList<>();
+    private ButtonsLeaf             buttonsLeaf;
+    private List<String>            handlingList;
+    private String                  handling;
+    private RegistrationHandling    registrationHandling;
+    private int                     deleteMessageId;
 
     @Override
     public boolean execute() throws TelegramApiException {
@@ -23,10 +26,30 @@ public class id028_Kpi extends Command {
             sendMessage(Const.NO_ACCESS);
             return EXIT;
         }
-
-
-
-
+        switch (waitingType) {
+            case START:
+                deleteMessage(updateMessageId);
+                handlingList = Arrays.asList(getText(Const.COUNT_HANDLING_TYPE_MESSAGE).split(Const.SPLIT));
+                handlingList.forEach(s -> list.add(s));
+                buttonsLeaf  = new ButtonsLeaf(list);
+                toDeleteKeyboard(sendMessageWithKeyboard(getText(Const.KPI_MESSAGE), buttonsLeaf.getListButton()));
+                waitingType  = WaitingType.SET_HANDLING;
+                return COMEBACK;
+            case SET_HANDLING:
+                deleteMessage(updateMessageId);
+                if (hasCallbackQuery()) {
+                    handling = handlingList.get(Integer.parseInt(updateMessageText));
+                    switchType();
+                }
+                return COMEBACK;
+            case SET_IIN:
+                deleteMessage(updateMessageId);
+                deleteMessage(deleteMessageId);
+                if (hasMessageText()) {
+                    
+                }
+                return COMEBACK;
+        }
 //        switch (waitingType) {
 //            case START:
 //                deleteMessage(updateMessageId);
@@ -79,4 +102,15 @@ public class id028_Kpi extends Command {
 //        }
         return EXIT;
     }
+
+    private void switchType() throws TelegramApiException {
+        switch (handling) {
+            case "Гранты":
+                registrationHandling = new RegistrationHandling();
+                deleteMessageId      = sendMessage(Const.SEND_IIN_FROM_ADMIN_MESSAGE);
+                waitingType          = WaitingType.SET_IIN;
+                break;
+        }
+    }
+
 }

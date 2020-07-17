@@ -64,21 +64,15 @@ public class id024_ReportComplaint extends Command {
         return EXIT;
     }
 
-    private int     sendStartDate() throws TelegramApiException {
-        return toDeleteKeyboard(sendMessageWithKeyboard(sendLightReport() + getText(Const.SELECT_START_DATE_MESSAGE), dateKeyboard.getCalendarKeyboard()));
-    }
+    private int     sendStartDate() throws TelegramApiException { return toDeleteKeyboard(sendMessageWithKeyboard(sendLightReport() + getText(Const.SELECT_START_DATE_MESSAGE), dateKeyboard.getCalendarKeyboard())); }
 
-    private int     sendEndDate()   throws TelegramApiException {
-        return toDeleteKeyboard(sendMessageWithKeyboard(Const.SELECT_END_DATE_MESSAGE, dateKeyboard.getCalendarKeyboard()));
-    }
+    private int     sendEndDate()   throws TelegramApiException { return toDeleteKeyboard(sendMessageWithKeyboard(Const.SELECT_END_DATE_MESSAGE, dateKeyboard.getCalendarKeyboard())); }
 
     private void    sendReport()    throws TelegramApiException {
-        int preview = sendMessage(getText(Const.REPORT_DOING_MESSAGE));
-        ComplaintReportService reportService = new ComplaintReportService();
+        int preview                             = sendMessage(getText(Const.REPORT_DOING_MESSAGE));
+        ComplaintReportService reportService    = new ComplaintReportService();
         reportService.sendSuggestionReport(chatId, bot, start, end, preview);
     }
 
-    private String  sendLightReport() {
-        return String.format(getText(Const.COMPLAINT_COUNT_MESSAGE), suggestionDao.getCount());
-    }
+    private String  sendLightReport() { return String.format(getText(Const.COMPLAINT_COUNT_MESSAGE), suggestionDao.getCount()); }
 }

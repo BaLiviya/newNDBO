@@ -5,7 +5,7 @@ import baliviya.com.github.NDBO.exceptions.NotRealizedMethodException;
 
 public class CommandFactory {
 
-    public static Command getCommand(long id) {
+    public  static Command getCommand(long id) {
         Command result = getCommandWithoutReflection((int) id);
         if (result == null) throw new NotRealizedMethodException("Not realized for type: " + id);
         return result;
@@ -71,8 +71,11 @@ public class CommandFactory {
                 return new id028_Kpi();
             case 29:
                 return new id029_Reminder();
+
             case 31:
                 return new id031_StructureShowInfo();
+            case 32:
+                return new id032_SpecialistInfo();
         }
         return null;
     }

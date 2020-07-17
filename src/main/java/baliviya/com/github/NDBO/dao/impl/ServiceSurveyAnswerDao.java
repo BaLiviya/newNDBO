@@ -9,7 +9,7 @@ import java.sql.SQLException;
 
 public class ServiceSurveyAnswerDao extends AbstractDao<ServiceSurveyAnswer> {
 
-    public void insert(ServiceSurveyAnswer surveyAnswer) {
+    public void                     insert(ServiceSurveyAnswer surveyAnswer) {
         int id = getNextId("SERVICE_SURVEY_ANSWERS");
         sql = "INSERT INTO " + Const.TABLE_NAME + ".SERVICE_SURVEY_ANSWERS(ID, SURVEY_ID, CHAT_ID, BUTTON, HANDLING_TYPE) VALUES ( ?,?,?,?,? )";
         getJdbcTemplate().update(sql, setParam(id, surveyAnswer.getSurveyId(), surveyAnswer.getChatId(), surveyAnswer.getButton(), surveyAnswer.getHandlingType() ));
@@ -17,7 +17,7 @@ public class ServiceSurveyAnswerDao extends AbstractDao<ServiceSurveyAnswer> {
     }
 
     @Override
-    protected ServiceSurveyAnswer mapper(ResultSet rs, int index) throws SQLException {
+    protected ServiceSurveyAnswer   mapper(ResultSet rs, int index) throws SQLException {
         ServiceSurveyAnswer serviceSurveyAnswer = new ServiceSurveyAnswer();
         serviceSurveyAnswer.setId(rs.getInt(1));
         serviceSurveyAnswer.setSurveyId(rs.getInt(2));

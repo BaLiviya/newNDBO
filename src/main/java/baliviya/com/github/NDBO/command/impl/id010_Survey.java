@@ -101,5 +101,4 @@ public class id010_Survey extends Command {
         }
         return EXIT;
     }
-
 }

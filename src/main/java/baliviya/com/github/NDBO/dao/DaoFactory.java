@@ -1,7 +1,6 @@
 package baliviya.com.github.NDBO.dao;
 
 import baliviya.com.github.NDBO.dao.impl.*;
-import baliviya.com.github.NDBO.entity.custom.ServiceSurveyAnswer;
 import baliviya.com.github.NDBO.utils.PropertiesUtil;
 import lombok.NoArgsConstructor;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
@@ -60,10 +59,6 @@ public class DaoFactory {
 
     public          ServiceTypeDao              getServiceTypeDao() {           return new ServiceTypeDao(); }
 
-    public          ServiceDao                  getServiceDao() {               return new ServiceDao(); }
-
-    public          RegistrationServiceDao      getRegistrationServiceDao() {   return new RegistrationServiceDao(); }
-
     public          EventDao                    getEventDao() {                 return new EventDao(); }
 
     public          QuestionDao                 getQuestionDao() {              return new QuestionDao(); }
@@ -87,4 +82,6 @@ public class DaoFactory {
     public          CategoryGroupDao            getCategoryGroupDao() {         return new CategoryGroupDao(); }
 
     public          ReminderTaskDao             getReminderTaskDao() {          return new ReminderTaskDao(); }
+
+    public          SpecialistDao               getSpecialistDao() {            return new SpecialistDao(); }
 }

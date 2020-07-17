@@ -10,18 +10,18 @@ import java.util.List;
 
 public class HandlingNameDao extends AbstractDao<HandlingName> {
 
-    public List<HandlingName> getAllTraining() {
+    public List<HandlingName>   getAllTraining() {
         sql = "SELECT * FROM " + Const.TABLE_NAME + ".TRAINING_NAME" ;
         return getJdbcTemplate().query(sql, this::mapper);
     }
 
-    public List<HandlingName> getAllBusiness() {
+    public List<HandlingName>   getAllBusiness() {
         sql = "SELECT * FROM " + Const.TABLE_NAME + ".BUSINESS_NAME" ;
         return getJdbcTemplate().query(sql, this::mapper);
     }
 
     @Override
-    protected HandlingName mapper(ResultSet rs, int index) throws SQLException {
+    protected HandlingName      mapper(ResultSet rs, int index) throws SQLException {
         HandlingName handlingName = new HandlingName();
         handlingName.setId(rs.getInt(1));
         handlingName.setName(rs.getString(2));

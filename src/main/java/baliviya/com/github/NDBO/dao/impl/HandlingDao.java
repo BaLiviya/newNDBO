@@ -10,14 +10,50 @@ import java.util.List;
 
 public class HandlingDao extends AbstractDao<Handling> {
 
-//    public Handling         getCourse(int courseNameId) {
-//        sql = "SELECT * FROM " + Const.TABLE_NAME + ".COURSE WHERE COURSE_NAME_ID = ?";
-//        return getJdbcTemplate().queryForObject(sql, setParam(courseNameId), this::mapper);
-//    }
+    public      void        insertCourse(Handling handling) {
+        sql = "INSERT INTO " + Const.TABLE_NAME + ".COURSE (PHOTO, TEXT, COURSE_NAME_ID, FULL_NAME, COURSE_TEACHER_ID) VALUES ( ?,?,?,?,? )";
+        getJdbcTemplate().update(sql, handling.getPhoto(), handling.getText(), handling.getHandlingTypeId(), handling.getFullName(), handling.getHandlingTeacherId());
+    }
+
+    public      void        updateCourse(Handling handling) {
+        sql = "UPDATE " + Const.TABLE_NAME + ".COURSE SET FULL_NAME = ?, TEXT = ?, PHOTO = ?, COURSE_TEACHER_ID = ? WHERE ID = ?";
+        getJdbcTemplate().update(sql, handling.getFullName(), handling.getText(), handling.getPhoto(), handling.getHandlingTeacherId(), handling.getId());
+    }
+
+    public      void        deleteCourse(int handlingId) {
+        sql = "DELETE FROM " + Const.TABLE_NAME + ".COURSE WHERE ID = ?";
+        getJdbcTemplate().update(sql, handlingId);
+    }
 
     public List<Handling>   getAllCourse(int courseNameId) {
         sql = "SELECT * FROM " + Const.TABLE_NAME + ".COURSE WHERE COURSE_NAME_ID = ?";
         return getJdbcTemplate().query(sql, setParam(courseNameId), this::mapper);
+    }
+
+    public      boolean     isCourseTeacher(long chatId) {
+        sql = "SELECT count(*) FROM " + Const.TABLE_NAME + ".COURSE WHERE COURSE_TEACHER_ID = ?";
+        return getJdbcTemplate().queryForObject(sql, setParam(chatId), Integer.class) > 0;
+    }
+
+    public      Handling    getCourseByChatId(long chatId) {
+        sql = "SELECT * FROM " + Const.TABLE_NAME + ".COURSE WHERE COURSE_TEACHER_ID = ?";
+        return getJdbcTemplate().queryForObject(sql, setParam(chatId), this::mapper);
+    }
+
+
+    public      void        insertTraining(Handling handling) {
+        sql = "INSERT INTO " + Const.TABLE_NAME + ".TRAINING (PHOTO, TEXT, TRAINING_NAME_ID, FULL_NAME, TRAINING_TEACHER_ID) VALUES ( ?,?,?,?,? )";
+        getJdbcTemplate().update(sql, handling.getPhoto(), handling.getText(), handling.getHandlingTypeId(), handling.getFullName(), handling.getHandlingTeacherId());
+    }
+
+    public      void        updateTraining(Handling handling) {
+        sql = "UPDATE " + Const.TABLE_NAME + ".TRAINING SET FULL_NAME = ?, TEXT = ?, PHOTO = ?, TRAINING_TEACHER_ID = ? WHERE ID = ?";
+        getJdbcTemplate().update(sql, handling.getFullName(), handling.getText(), handling.getPhoto(), handling.getHandlingTeacherId(),handling.getId());
+    }
+
+    public      void        deleteTraining(int handlingId) {
+        sql = "DELETE FROM " + Const.TABLE_NAME + ".TRAINING WHERE ID = ?";
+        getJdbcTemplate().update(sql, handlingId);
     }
 
     public List<Handling>   getAllTraining(int trainingNameId) {
@@ -25,14 +61,41 @@ public class HandlingDao extends AbstractDao<Handling> {
         return getJdbcTemplate().query(sql, setParam(trainingNameId), this::mapper);
     }
 
-//    public Handling         getTraining(int trainingNameId) {
-//        sql = "SELECT * FROM " + Const.TABLE_NAME + ".TRAINING WHERE TRAINING_NAME_ID = ?";
-//        return getJdbcTemplate().queryForObject(sql, setParam(trainingNameId), this::mapper);
-//    }
+    public      boolean     isTrainingTeacher(long chatId) {
+        sql = "SELECT count(*) FROM " + Const.TABLE_NAME + ".TRAINING WHERE TRAINING_TEACHER_ID = ?";
+        return getJdbcTemplate().queryForObject(sql, setParam(chatId), Integer.class) > 0;
+    }
+
+    public      Handling    getTrainingByChatId(long chatId) {
+        sql = "SELECT * FROM " + Const.TABLE_NAME + ".TRAINING WHERE TRAINING_TEACHER_ID = ?";
+        return getJdbcTemplate().queryForObject(sql, setParam(chatId), this::mapper);
+    }
+
+
+    public      void        deleteBusiness(int handlingId) {
+        sql = "DELETE FROM " + Const.TABLE_NAME + ".BUSINESS WHERE ID = ?";
+        getJdbcTemplate().update(sql, handlingId);
+    }
 
     public List<Handling>   getAllBusiness(int businessNameId) {
         sql = "SELECT * FROM " + Const.TABLE_NAME + ".BUSINESS WHERE BUSINESS_NAME_ID = ?";
         return getJdbcTemplate().query(sql, setParam(businessNameId), this::mapper);
+    }
+
+
+    public      void        insertConsultation(Handling handling) {
+        sql = "INSERT INTO " + Const.TABLE_NAME + ".CONSULTATION (PHOTO, TEXT, CONSULTATION_NAME_ID, FULL_NAME, CONSULTATION_TEACHER_ID) VALUES ( ?,?,?,?,? )";
+        getJdbcTemplate().update(sql, handling.getPhoto(), handling.getText(), handling.getHandlingTypeId(), handling.getFullName(), handling.getHandlingTeacherId());
+    }
+
+    public      void        updateConsultation(Handling handling) {
+        sql = "UPDATE " + Const.TABLE_NAME + ".CONSULTATION SET FULL_NAME = ?, TEXT = ?, PHOTO = ?, CONSULTATION_TEACHER_ID = ? WHERE ID = ?";
+        getJdbcTemplate().update(sql, handling.getFullName(), handling.getText(), handling.getPhoto(), handling.getHandlingTeacherId(), handling.getId());
+    }
+
+    public      void        deleteConsultation(int handlingId) {
+        sql = "DELETE FROM " + Const.TABLE_NAME + ".CONSULTATION WHERE ID = ?";
+        getJdbcTemplate().update(sql, handlingId);
     }
 
     public List<Handling>   getAllConsultation(int consultationNameId) {
@@ -40,38 +103,19 @@ public class HandlingDao extends AbstractDao<Handling> {
         return getJdbcTemplate().query(sql, setParam(consultationNameId), this::mapper);
     }
 
-//    public Handling         getBusiness(int businessNameId) {
-//        sql = "SELECT * FROM " + Const.TABLE_NAME + ".BUSINESS WHERE BUSINESS_NAME_ID = ?";
-//        return getJdbcTemplate().queryForObject(sql, setParam(businessNameId), this::mapper);
-//    }
-
-    public List<Handling>   getAllService(int serviceTypeId) {
-        sql = "SELECT * FROM " + Const.TABLE_NAME + ".SERVICE WHERE SERVICE_TYPE_ID = ?";
-        return getJdbcTemplate().query(sql, setParam(serviceTypeId), this::mapper);
+    public      boolean     isConsultationTeacher(long chatId) {
+        sql = "SELECT count(*) FROM " + Const.TABLE_NAME + ".CONSULTATION WHERE CONSULTATION_TEACHER_ID = ?";
+        return getJdbcTemplate().queryForObject(sql, setParam(chatId), Integer.class) > 0;
     }
+
+    public      Handling    getConsultationByChatId(long chatId) {
+        sql = "SELECT * FROM " + Const.TABLE_NAME + ".CONSULTATION WHERE CONSULTATION_TEACHER_ID = ?";
+        return getJdbcTemplate().queryForObject(sql, setParam(chatId), this::mapper);
+    }
+
 
     public      void        insertService(Handling handling) {
         sql = "INSERT INTO " + Const.TABLE_NAME + ".SERVICE (PHOTO, TEXT, SERVICE_TYPE_ID, FULL_NAME, SERVICE_TEACHER_ID) VALUES ( ?,?,?,?,? )";
-        getJdbcTemplate().update(sql, handling.getPhoto(), handling.getText(), handling.getHandlingTypeId(), handling.getFullName(), handling.getHandlingTeacherId());
-    }
-
-    public      void        insertCourse(Handling handling) {
-        sql = "INSERT INTO " + Const.TABLE_NAME + ".COURSE (PHOTO, TEXT, COURSE_NAME_ID, FULL_NAME, COURSE_TEACHER_ID) VALUES ( ?,?,?,?,? )";
-        getJdbcTemplate().update(sql, handling.getPhoto(), handling.getText(), handling.getHandlingTypeId(), handling.getFullName(), handling.getHandlingTeacherId());
-    }
-
-    public      void        insertTraining(Handling handling) {
-        sql = "INSERT INTO " + Const.TABLE_NAME + ".TRAINING (PHOTO, TEXT, TRAINING_NAME_ID, FULL_NAME, TRAINING_TEACHER_ID) VALUES ( ?,?,?,?,? )";
-        getJdbcTemplate().update(sql, handling.getPhoto(), handling.getText(), handling.getHandlingTypeId(), handling.getFullName(), handling.getHandlingTeacherId());
-    }
-
-//    public      void        insertBusiness(Handling handling) {
-//        sql = "INSERT INTO " + Const.TABLE_NAME + ".BUSINESS (PHOTO, TEXT, BUSINESS_NAME_ID, FULL_NAME, BUSINESS_TEACHER_ID) VALUES ( ?,?,?,?,? )";
-//        getJdbcTemplate().update(sql, handling.getPhoto(), handling.getText(), handling.getHandlingTypeId(), handling.getFullName(), handling.getHandlingTeacherId());
-//    }
-
-    public      void        insertConsultation(Handling handling) {
-        sql = "INSERT INTO " + Const.TABLE_NAME + ".CONSULTATION (PHOTO, TEXT, CONSULTATION_NAME_ID, FULL_NAME, CONSULTATION_TEACHER_ID) VALUES ( ?,?,?,?,? )";
         getJdbcTemplate().update(sql, handling.getPhoto(), handling.getText(), handling.getHandlingTypeId(), handling.getFullName(), handling.getHandlingTeacherId());
     }
 
@@ -80,49 +124,29 @@ public class HandlingDao extends AbstractDao<Handling> {
         getJdbcTemplate().update(sql, handling.getFullName(), handling.getText(), handling.getPhoto(), handling.getHandlingTeacherId() ,handling.getId());
     }
 
-    public      void        updateCourse(Handling handling) {
-        sql = "UPDATE " + Const.TABLE_NAME + ".COURSE SET FULL_NAME = ?, TEXT = ?, PHOTO = ?, COURSE_TEACHER_ID = ? WHERE ID = ?";
-        getJdbcTemplate().update(sql, handling.getFullName(), handling.getText(), handling.getPhoto(), handling.getHandlingTeacherId(), handling.getId());
-    }
-
-    public      void        updateTraining(Handling handling) {
-        sql = "UPDATE " + Const.TABLE_NAME + ".TRAINING SET FULL_NAME = ?, TEXT = ?, PHOTO = ?, TRAINING_TEACHER_ID = ? WHERE ID = ?";
-        getJdbcTemplate().update(sql, handling.getFullName(), handling.getText(), handling.getPhoto(), handling.getHandlingTeacherId(),handling.getId());
-    }
-
-//    public      void        updateBusiness(Handling handling) {
-//        sql = "UPDATE " + Const.TABLE_NAME + ".BUSINESS SET FULL_NAME = ?, TEXT = ?, PHOTO = ? WHERE ID = ?";
-//        getJdbcTemplate().update(sql, handling.getFullName(), handling.getText(), handling.getPhoto(), handling.getId());
-//    }
-
-    public      void        updateConsultation(Handling handling) {
-        sql = "UPDATE " + Const.TABLE_NAME + ".CONSULTATION SET FULL_NAME = ?, TEXT = ?, PHOTO = ?, CONSULTATION_TEACHER_ID = ? WHERE ID = ?";
-        getJdbcTemplate().update(sql, handling.getFullName(), handling.getText(), handling.getPhoto(), handling.getHandlingTeacherId(), handling.getId());
-    }
-
     public      void        deleteService(int handlingId) {
         sql = "DELETE FROM " + Const.TABLE_NAME + ".SERVICE WHERE ID = ?";
         getJdbcTemplate().update(sql, handlingId);
     }
 
-    public      void        deleteCourse(int handlingId) {
-        sql = "DELETE FROM " + Const.TABLE_NAME + ".COURSE WHERE ID = ?";
-        getJdbcTemplate().update(sql, handlingId);
+    public List<Handling>   getAllService(int serviceTypeId) {
+        sql = "SELECT * FROM " + Const.TABLE_NAME + ".SERVICE WHERE SERVICE_TYPE_ID = ?";
+        return getJdbcTemplate().query(sql, setParam(serviceTypeId), this::mapper);
     }
 
-    public      void        deleteTraining(int handlingId) {
-        sql = "DELETE FROM " + Const.TABLE_NAME + ".TRAINING WHERE ID = ?";
-        getJdbcTemplate().update(sql, handlingId);
+    public      boolean     isServiceTeacher(long chatId) {
+        sql = "SELECT count(*) FROM " + Const.TABLE_NAME + ".SERVICE WHERE SERVICE_TEACHER_ID = ?";
+        return getJdbcTemplate().queryForObject(sql, setParam(chatId), Integer.class) > 0;
     }
 
-    public      void        deleteBusiness(int handlingId) {
-        sql = "DELETE FROM " + Const.TABLE_NAME + ".BUSINESS WHERE ID = ?";
-        getJdbcTemplate().update(sql, handlingId);
+    public      Handling    getServiceByChatId(long chatId) {
+        sql = "SELECT * FROM " + Const.TABLE_NAME + ".SERVICE WHERE SERVICE_TEACHER_ID = ?";
+        return getJdbcTemplate().queryForObject(sql, setParam(chatId), this::mapper);
     }
 
-    public      void        deleteConsultation(int handlingId) {
-        sql = "DELETE FROM " + Const.TABLE_NAME + ".CONSULTATION WHERE ID = ?";
-        getJdbcTemplate().update(sql, handlingId);
+    public List<Handling>   getAll() {
+        sql = "SELECT * FROM " + Const.TABLE_NAME + ".SERVICE";
+        return getJdbcTemplate().query(sql, this::mapper);
     }
 
     @Override

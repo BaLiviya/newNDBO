@@ -8,13 +8,13 @@ import java.sql.SQLException;
 
 public class GroupDao extends AbstractDao<Group> {
 
-    public Group getGroupToId(int id) {
+    public Group    getGroupToId(int id) {
         sql = "SELECT * FROM GROUPS WHERE ID = ?";
         return getJdbcTemplate().queryForObject(sql, setParam(id), this::mapper);
     }
 
-    public void update(Group group) {
-        sql = "UPDATE GROUPS SET NAMES = ?, CHAT_ID = ?, USER_NAME = ?, IS_REGISTERED = ?, MESSAGE = ?, IS_CAN_PHOTO = ?, IS_CAN_VIDEO = ?, IS_CAN_AUDIO = ?, IS_CAN_FILE = ?, IS_CAN_LINK = ?, IS_CAN_STICKER = ?, IS_CAN_WITHOUT_TAG = ? WHERE CHAT_ID = ?";
+    public void     update(Group group) {
+        sql = "UPDATE GROUPS SET NAMES = ?, CHAT_ID = ?, USER_NAME = ?, IS_REGISTERED = ?, MESSAGE = ?, IS_CAN_PHOTO = ?, IS_CAN_VIDEO = ?, IS_CAN_AUDIO = ?, IS_CAN_FILE = ?, IS_CAN_LINK = ?, IS_CAN_STICKERS = ?, IS_CAN_WITHOUT_TAG = ? WHERE CHAT_ID = ?";
         getJdbcTemplate().update(sql, group.getNames(), group.getChatId(), group.getUserName(), group.isRegistered(), group.getMessage(), group.isCanPhoto(), group.isCanVideo(), group.isCanAudio(),
                 group.isCanFile(), group.isCanLink(), group.isCanSticker(), group.isCanWithoutTag(), group.getChatId());
     }

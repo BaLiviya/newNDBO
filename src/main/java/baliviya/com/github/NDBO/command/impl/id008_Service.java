@@ -23,10 +23,10 @@ public class id008_Service extends Command {
     private int                     serviceTypeId;
     private List<String>            list = new ArrayList<>();
     private List<ServiceType>       serviceTypes;
-    private List<Service>           services;
+    private List<Handling>          services;
     private List<String>            listAnswer;
-    private Service                 service;
-    private RegistrationService     registrationService;
+    private Handling                service;
+    private RegistrationHandling    registrationService;
     private Language                currentLanguage;
     private List<ServiceQuestion>   allQuestion;
     private List<QuestMessage>      allMessage;
@@ -42,7 +42,7 @@ public class id008_Service extends Command {
                     deleteMessageId         = registrationMessage();
                     return EXIT;
                 }
-                registrationService         = new RegistrationService();
+                registrationService         = new RegistrationHandling();
                 registrationService.setRegistrationDate(new Date());
                 registrationService.setChatId(chatId);
                 registrationService.setIin(Long.parseLong(recipientDao.getRecipientByChatId(chatId).getIin())); // TODO: 08.07.2020 сделать ИИН
@@ -53,7 +53,6 @@ public class id008_Service extends Command {
                 delete();
                 if (hasCallbackQuery()) {
                     serviceTypeId           = serviceTypes.get(Integer.parseInt(updateMessageText)).getId();
-                    registrationService.setServiceTypeId(serviceTypeId);
                     deleteMessageId         = getService();
                     waitingType             = WaitingType.SET_SERVICE;
                 } else {
@@ -65,7 +64,7 @@ public class id008_Service extends Command {
                 delete();
                 if (hasCallbackQuery()) {
                     service                   = services.get(Integer.parseInt(updateMessageText));
-                    registrationService       .setServiceId(service.getId());
+                    registrationService       .setIdHandling(service.getId());
                     String formatMessage      = getText(Const.INFORMATION_TEXT_MESSAGE);
                     String result             = String.format(formatMessage, service.getFullName(), service.getText());
                     if (service.getPhoto() != null) secondDeleteMessageId = bot.execute(new SendPhoto().setChatId(chatId).setPhoto(service.getPhoto())).getMessageId();
@@ -80,7 +79,7 @@ public class id008_Service extends Command {
                 delete();
                 if (hasCallbackQuery()) {
                     if (isButton(Const.JOIN_BUTTON)) {
-                        factory.getRegistrationServiceDao().insert(registrationService);
+                        factory.getRegistrationHandlingDao().insertService(registrationService);
                         sendMessageToSpec();
                         deleteMessageId    = done();
                         return EXIT;
@@ -169,13 +168,13 @@ public class id008_Service extends Command {
 
     private int     getService()            throws TelegramApiException {
         list.clear();
-        services    = factory.getServiceDao().getAll(serviceTypeId);
+        services    = handlingDao.getAllService(serviceTypeId);
         services.forEach((e) -> list.add(e.getFullName()));
         buttonsLeaf = new ButtonsLeaf(list);
         return toDeleteKeyboard(sendMessageWithKeyboard(getText(Const.CHOOSE_SPEC_MESSAGE), buttonsLeaf.getListButton()));
     }
 
-    private int     sendMessageToSpec()     throws TelegramApiException { return botUtils.sendMessage(String.format(getText(Const.JOINED_TO_SERVICE_MESSAGE), userDao.getUserByChatId(registrationService.getChatId()).getFullName()), service.getServiceTeacherId()); }
+    private int     sendMessageToSpec()     throws TelegramApiException { return botUtils.sendMessage(String.format(getText(Const.JOINED_TO_SERVICE_MESSAGE), userDao.getUserByChatId(registrationService.getChatId()).getFullName()), service.getHandlingTeacherId()); }
 
     private int     wrongData()             throws TelegramApiException { return botUtils.sendMessage(Const.WRONG_DATA_TEXT, chatId); }
 

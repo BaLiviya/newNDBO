@@ -9,33 +9,33 @@ import java.util.List;
 
 public class CategoryGroupDao extends AbstractDao<CategoryGroup> {
 
-    public List<CategoryGroup> getByGroupChatId(long groupChatId) {
+    public List<CategoryGroup>  getByGroupChatId(long groupChatId) {
         sql = "SELECT * FROM CATEGORY_GROUP WHERE GROUP_CHAT_ID = ?";
         return getJdbcTemplate().query(sql, setParam(groupChatId), this::mapper);
     }
 
-    public boolean  isUseCategory(int categoryId, long groupChatId) {
-        sql = "SELECT count(*) FROM CATEGORY_GROUP WHERE ID = ? AND GROUP_CHAT_ID = ?";
+    public boolean              isUseCategory(int categoryId, long groupChatId) {
+        sql = "SELECT count(*) FROM CATEGORY_GROUP WHERE ID_CATEGORY = ? AND GROUP_CHAT_ID = ?";
         return getJdbcTemplate().queryForObject(sql, setParam(categoryId, groupChatId), Integer.class) > 0;
     }
 
-    public List<CategoryGroup> get(int categoryId, long groupChatId) {
-        sql = "SELECT * FROM CATEGORY_GROUP WHERE ID = ? AND GROUP_CHAT_ID = ?";
+    public List<CategoryGroup>  get(int categoryId, long groupChatId) {
+        sql = "SELECT * FROM CATEGORY_GROUP WHERE ID_CATEGORY = ? AND GROUP_CHAT_ID = ?";
         return getJdbcTemplate().query(sql, setParam(categoryId, groupChatId), this::mapper);
     }
 
-    public void deleteFromGroup(int categoryId, long groupChatId) {
-        sql = "DELETE FROM CATEGORY_GROUP WHERE ID = ? AND GROUP_CHAT_ID = ?";
+    public void                 deleteFromGroup(int categoryId, long groupChatId) {
+        sql = "DELETE FROM CATEGORY_GROUP WHERE ID_CATEGORY = ? AND GROUP_CHAT_ID = ?";
         getJdbcTemplate().update(sql, setParam(categoryId, groupChatId));
     }
 
-    public void addGroup(int categoryId, long groupChatId) {
-        sql = "INSERT INTO CATEGORY_GROUP(ID, GROUP_CHAT_ID) VALUES ( ?,? )";
+    public void                 addGroup(int categoryId, long groupChatId) {
+        sql = "INSERT INTO CATEGORY_GROUP(ID_CATEGORY, GROUP_CHAT_ID) VALUES ( ?,? )";
         getJdbcTemplate().update(sql, setParam(categoryId, groupChatId));
     }
 
     @Override
-    protected CategoryGroup mapper(ResultSet rs, int index) throws SQLException {
+    protected CategoryGroup     mapper(ResultSet rs, int index) throws SQLException {
         CategoryGroup categoryGroup = new CategoryGroup();
         categoryGroup.setId         (rs.getInt  (1));
         categoryGroup.setGroupChatId(rs.getLong (2));

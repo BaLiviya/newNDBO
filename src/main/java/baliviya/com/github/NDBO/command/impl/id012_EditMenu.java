@@ -19,8 +19,6 @@ import java.util.List;
 @Slf4j
 public class id012_EditMenu extends Command {
 
-    private static final String linkEdit = "/linkId";
-
     private Language currentLanguage;
     private int      buttonId;
     private long     keyboardMarkUpId;
@@ -32,11 +30,12 @@ public class id012_EditMenu extends Command {
     private boolean  isUrl = false;
     private int      buttonLinkId;
 
-    private final static String NAME = messageDao.getMessageText(Const.NAME_TEXT_FOR_LINK);
-    private final static String LINK = messageDao.getMessageText(Const.LINK_TEXT_FOR_EDIT);
+    private static final String linkEdit    = "/linkId";
+    private final static String NAME        = messageDao.getMessageText(Const.NAME_TEXT_FOR_LINK);
+    private final static String LINK        = messageDao.getMessageText(Const.LINK_TEXT_FOR_EDIT);
 
     @Override
-    public boolean execute() throws TelegramApiException {
+    public boolean      execute()               throws TelegramApiException {
         if (!isAdmin() && !isMainAdmin()) {
             sendMessage(Const.NO_ACCESS);
             return EXIT;
@@ -134,12 +133,12 @@ public class id012_EditMenu extends Command {
         return EXIT;
     }
 
-    private void sendListMenu() throws TelegramApiException {
+    private void        sendListMenu()          throws TelegramApiException {
         toDeleteKeyboard(sendMessageWithKeyboard("Список меню доступных для редактирования: ", keyboardMarkUpDao.selectForEdition(1, currentLanguage)));
         waitingType = WaitingType.CHOOSE_OPTION;
     }
 
-    private void sendEditor() throws TelegramApiException {
+    private void        sendEditor()            throws TelegramApiException {
         clearOld();
         loadElements();
         String desc;
@@ -164,12 +163,12 @@ public class id012_EditMenu extends Command {
         } else {
             desc = String.format(getText(1028), currentButton.getName(), getText(1029), currentLanguage.name());
         }
-        textId = sendMessageWithKeyboard(desc,Const.KEYBOARD_EDIT_BUTTON_ID);
+        textId      = sendMessageWithKeyboard(desc,Const.KEYBOARD_EDIT_BUTTON_ID);
         toDeleteKeyboard(textId);
         waitingType = WaitingType.COMMAND_EDITOR;
     }
 
-    private boolean isCommand() throws TelegramApiException {
+    private boolean     isCommand()             throws TelegramApiException {
         deleteMessage(updateMessageId);
         if (hasPhoto()) {
             if (!isHasMessageForEdit()) return COMEBACK;
@@ -240,7 +239,7 @@ public class id012_EditMenu extends Command {
         return EXIT;
     }
 
-    private boolean isHasMessageForEdit() throws TelegramApiException {
+    private boolean     isHasMessageForEdit()   throws TelegramApiException {
         if (message == null) {
             sendMessage(1032);
             return COMEBACK;
@@ -248,12 +247,12 @@ public class id012_EditMenu extends Command {
         return EXIT;
     }
 
-    private void clearOld() {
+    private void        clearOld() {
         deleteMessage(textId);
         deleteMessage(photoId);
     }
 
-    private void loadElements() {
+    private void        loadElements() {
         if (currentButton.getMessageId() == 0) {
             message = null;
         } else {
@@ -261,9 +260,9 @@ public class id012_EditMenu extends Command {
         }
     }
 
-    private static int getMaxSizeMessage() { return Const.MAX_SIZE_MESSAGE; }
+    private static int  getMaxSizeMessage() { return Const.MAX_SIZE_MESSAGE; }
 
-    private void updateFile() {
+    private void        updateFile() {
         if (hasDocument()) {
             message.setFile(update.getMessage().getDocument().getFileId(), FileType.document);
         } else if (hasAudio()) {
@@ -274,23 +273,23 @@ public class id012_EditMenu extends Command {
         update();
     }
 
-    private void updatePhoto() {
+    private void        updatePhoto() {
         message.setPhoto(updateMessagePhoto);
         update();
     }
 
-    private void update() {
+    private void        update() {
         messageDao.update(message);
         log.info("Update message {} for lang {} - chatId = ", message.getId(), currentLanguage.name(), chatId);
     }
 
-    private void deleteFile() {
+    private void        deleteFile() {
         message.setFileType(null);
         message.setFile(null);
         update();
     }
 
-    private boolean getButtonIds(int keyboardMarkUpId) {
+    private boolean     getButtonIds(int keyboardMarkUpId) {
         String buttonString = keyboardMarkUpDao.getButtonString(keyboardMarkUpId);
         if (buttonString == null) return COMEBACK;
         String rows[] = buttonString.split(";");

@@ -45,11 +45,7 @@ public class id023_Complaint extends Command {
         return EXIT;
     }
 
-    private int     getComplaint()  throws TelegramApiException {
-        return botUtils.sendMessage(Const.COMPLAINT_SEND_MESSAGE, chatId);
-    }
+    private int     getComplaint()  throws TelegramApiException { return botUtils.sendMessage(Const.COMPLAINT_SEND_MESSAGE, chatId); }
 
-    private int     wrongData()     throws TelegramApiException {
-        return botUtils.sendMessage(Const.WRONG_DATA_TEXT, chatId);
-    }
+    private int     wrongData()     throws TelegramApiException { return botUtils.sendMessage(Const.WRONG_DATA_TEXT, chatId); }
 }

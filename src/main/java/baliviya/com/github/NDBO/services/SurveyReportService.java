@@ -40,7 +40,7 @@ public class SurveyReportService {
     private Sheet         sheets;
     private Sheet         sheet;
 
-    public void sendSurveyReport(long chatId, DefaultAbsSender bot, int messagePrevReport) {
+    public void             sendSurveyReport(long chatId, DefaultAbsSender bot, int messagePrevReport) {
         currentLanguage = LanguageService.getLanguage(chatId);
         try {
             sendSurvey(chatId, bot, messagePrevReport);
@@ -54,7 +54,7 @@ public class SurveyReportService {
         }
     }
 
-    private void sendSurvey(long chatId, DefaultAbsSender bot, int messagePrevReport) throws TelegramApiException {
+    private void            sendSurvey(long chatId, DefaultAbsSender bot, int messagePrevReport) throws TelegramApiException {
         List<Question> all = daoFactory.getQuestionDao().getAll(currentLanguage);
         if (all == null || all.size() == 0) {
             bot.execute(new DeleteMessage(chatId, messagePrevReport));

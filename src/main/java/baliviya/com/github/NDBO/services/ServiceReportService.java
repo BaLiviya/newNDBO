@@ -159,12 +159,12 @@ public class ServiceReportService {
     private void addSecondPageInfo() {
         setSecondTitleValue(secondSheet.getRow( 6), 3, String.valueOf(factory.getRecipientDao().getCountByTime(dateBegin, dateEnd)),               6);
 
-        setSecondTitleValue(secondSheet.getRow( 7), 3, String.valueOf(factory.getServiceDao().getAll().size()),            7);
-        setSecondTitleValue(secondSheet.getRow( 9), 3, String.valueOf(factory.getServiceDao().getAll(2).size()),9);
-        setSecondTitleValue(secondSheet.getRow(10), 3, String.valueOf(factory.getServiceDao().getAll(1).size()),10);
-        setSecondTitleValue(secondSheet.getRow(11), 3, String.valueOf(factory.getServiceDao().getAll(4).size()),11);
-        setSecondTitleValue(secondSheet.getRow(12), 3, String.valueOf(factory.getServiceDao().getAll(3).size()),12);
-        setSecondTitleValue(secondSheet.getRow(13), 3, String.valueOf(factory.getServiceDao().getAll(5).size()),13);
+//        setSecondTitleValue(secondSheet.getRow( 7), 3, String.valueOf(factory.getServiceDao().getAll().size()),            7);
+//        setSecondTitleValue(secondSheet.getRow( 9), 3, String.valueOf(factory.getServiceDao().getAll(2).size()),9);
+//        setSecondTitleValue(secondSheet.getRow(10), 3, String.valueOf(factory.getServiceDao().getAll(1).size()),10);
+//        setSecondTitleValue(secondSheet.getRow(11), 3, String.valueOf(factory.getServiceDao().getAll(4).size()),11);
+//        setSecondTitleValue(secondSheet.getRow(12), 3, String.valueOf(factory.getServiceDao().getAll(3).size()),12);
+//        setSecondTitleValue(secondSheet.getRow(13), 3, String.valueOf(factory.getServiceDao().getAll(5).size()),13);
 
 
         setSecondTitleValue(secondSheet.getRow(15), 3, String.valueOf(registrationHandlingDao.getCountConsultationById(dateBegin, dateEnd, 1)), 15);

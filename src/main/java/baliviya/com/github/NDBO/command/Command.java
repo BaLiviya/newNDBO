@@ -72,6 +72,7 @@ public abstract class Command {
     protected static PropertiesDao          propertiesDao           = factory.getPropertiesDao();
     protected static CategoryGroupDao       categoryGroupDao        = factory.getCategoryGroupDao();
     protected static CategoryDao            categoryDao             = factory.getCategoryDao();
+    protected static SpecialistDao          specialistDao           = factory.getSpecialistDao();
 
     public abstract boolean execute()                                                           throws TelegramApiException;
 

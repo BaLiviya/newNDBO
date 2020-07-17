@@ -11,32 +11,32 @@ import java.util.List;
 
 public class ReminderTaskDao extends AbstractDao<ReminderTask> {
 
-    public List<ReminderTask> getAll() {
+    public List<ReminderTask>   getAll() {
         sql = "SELECT * FROM " + Const.TABLE_NAME + ".REMINDER_TASK";
         return getJdbcTemplate().query(sql, this::mapper);
     }
 
-    public void insert(ReminderTask reminderTask) {
+    public void                 insert(ReminderTask reminderTask) {
         sql = "INSERT INTO " + Const.TABLE_NAME + ".REMINDER_TASK(TEXT, DATE_BEGIN) VALUES ( ?,? )";
         getJdbcTemplate().update(sql, reminderTask.getText(), reminderTask.getDateBegin());
     }
 
-    public void delete(int reminderTaskId) {
+    public void                 delete(int reminderTaskId) {
         sql = "DELETE FROM " + Const.TABLE_NAME + ".REMINDER_TASK WHERE ID = ?";
         getJdbcTemplate().update(sql, setParam(reminderTaskId));
     }
 
-    public void update(ReminderTask reminderTask) {
+    public void                 update(ReminderTask reminderTask) {
         sql = "UPDATE " + Const.TABLE_NAME + ".REMINDER_TASK SET DATE_BEGIN = ?, TEXT = ? WHERE ID = ?";
         getJdbcTemplate().update(sql, reminderTask.getDateBegin(),reminderTask.getText(), reminderTask.getId());
     }
 
-    public ReminderTask getById(int reminderTaskId) {
+    public ReminderTask         getById(int reminderTaskId) {
         sql = "SELECT * FROM " + Const.TABLE_NAME + ".REMINDER_TASK WHERE ID = ?";
         return getJdbcTemplate().queryForObject(sql, setParam(reminderTaskId), this::mapper);
     }
 
-    public List<ReminderTask> getByTime(Date dateBegin, Date dateEnd) {
+    public List<ReminderTask>   getByTime(Date dateBegin, Date dateEnd) {
         sql = "SELECT * FROM " + Const.TABLE_NAME + ".REMINDER_TASK WHERE DATE_BEGIN BETWEEN to_date(?,'YYYY-MM-DD') AND to_date(?,'YYYY-MM-DD HH:mm:SS')";
         return getJdbcTemplate().query(sql, setParam(dateBegin, dateEnd), this::mapper);
     }

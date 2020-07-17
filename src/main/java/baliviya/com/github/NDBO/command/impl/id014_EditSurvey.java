@@ -31,44 +31,37 @@ public class id014_EditSurvey extends Command {
     private QuestMessage        addQuestMessage;
     private WaitingType         updateType = WaitingType.START;
 
-
     @Override
-    public boolean execute() throws TelegramApiException {
+    public boolean  execute()           throws TelegramApiException {
         if (!isAdmin() && !isMainAdmin()) {
             sendMessage(Const.NO_ACCESS);
             return EXIT;
         }
         switch (updateType) {
             case UPDATE_QUEST:
-                if (isCommand()) {
-                    return COMEBACK;
-                }
+                if (isCommand()) return COMEBACK;
                 break;
             case UPDATE_MESSAGE:
-                if (isCommandMessage()) {
-                    return COMEBACK;
-                }
+                if (isCommandMessage()) return COMEBACK;
                 break;
         }
         switch (waitingType) {
             case START:
                 deleteMessage(updateMessageId);
                 currentLanguage = LanguageService.getLanguage(chatId);
-                all = questionDao.getAll(currentLanguage);
-                buttonsLeaf = new ButtonsLeaf(all.stream().map(Question::getName).collect(Collectors.toList()));
-                toDeleteKeyboard(sendMessageWithKeyboard("Выберите опрос для редактирования", buttonsLeaf.getListButton())); // TODO: 15.03.2020 сделать запись в бд
-                waitingType = WaitingType.CHOOSE_QUESTION;
+                all             = questionDao.getAll(currentLanguage);
+                buttonsLeaf     = new ButtonsLeaf(all.stream().map(Question::getName).collect(Collectors.toList()));
+                toDeleteKeyboard(sendMessageWithKeyboard("Выберите опрос для редактирования", buttonsLeaf.getListButton()));
+                waitingType     = WaitingType.CHOOSE_QUESTION;
                 return COMEBACK;
             case CHOOSE_QUESTION:
                 deleteMessage(updateMessageId);
                 if (hasCallbackQuery()) {
-                    if (buttonsLeaf.isNext(updateMessageText)) {
-                        toDeleteKeyboard(sendMessageWithKeyboard("Выберите опрос для редактирования", buttonsLeaf.getListButton()));
-                    }
-                    questId = all.get(Integer.parseInt(updateMessageText)).getId();
+                    if (buttonsLeaf.isNext(updateMessageText)) toDeleteKeyboard(sendMessageWithKeyboard("Выберите опрос для редактирования", buttonsLeaf.getListButton()));
+                    questId     = all.get(Integer.parseInt(updateMessageText)).getId();
                     sendMessage(1045);
                     waitingType = WaitingType.EDITION;
-                    updateType = WaitingType.UPDATE_QUEST;
+                    updateType  = WaitingType.UPDATE_QUEST;
                     sendEditor();
                 } else {
                     toDeleteKeyboard(sendMessageWithKeyboard("Выберите опрос для редактирования", buttonsLeaf.getListButton()));
@@ -154,25 +147,25 @@ public class id014_EditSurvey extends Command {
         return EXIT;
     }
 
-    private void sendEditor() throws TelegramApiException {
+    private void    sendEditor()        throws TelegramApiException {
         deleteMessage(editionMessageId);
         deleteMessage(updateMessageId);
         loadQuest();
-        String text = String.format(getText(1046), messageDao.getMessageText(1047, currentLanguage), question.getName(), question.getDesc());
-        buttonsLeaf = new ButtonsLeaf(questMessageList.stream().map(QuestMessage::getRange).collect(Collectors.toList()));
-        editionMessageId =  sendMessageWithKeyboard(text, buttonsLeaf.getListButton());
+        String text         = String.format(getText(1046), messageDao.getMessageText(1047, currentLanguage), question.getName(), question.getDesc());
+        buttonsLeaf         = new ButtonsLeaf(questMessageList.stream().map(QuestMessage::getRange).collect(Collectors.toList()));
+        editionMessageId    =  sendMessageWithKeyboard(text, buttonsLeaf.getListButton());
         toDeleteKeyboard(editionMessageId);
     }
 
-    private void loadQuest() {
-        question = questionDao.getById(questId, currentLanguage);
-        questMessageList = questMessageDao.getAll(questId, currentLanguage);
+    private void    loadQuest() {
+        question            = questionDao.getById(questId, currentLanguage);
+        questMessageList    = questMessageDao.getAll(questId, currentLanguage);
     }
 
-    private boolean isCommand() throws TelegramApiException {
+    private boolean isCommand()         throws TelegramApiException {
         if (hasCallbackQuery()) {
-            questMessageId = questMessageList.get(Integer.parseInt(updateMessageText)).getId();
-            updateType = WaitingType.UPDATE_MESSAGE;
+            questMessageId  = questMessageList.get(Integer.parseInt(updateMessageText)).getId();
+            updateType      = WaitingType.UPDATE_MESSAGE;
             sendEditorMessage();
         } else if (isButton(1009)) {
             sendMessage("Введите новое название");
@@ -195,16 +188,16 @@ public class id014_EditSurvey extends Command {
         return EXIT;
     }
 
-    private void sendEditorMessage() throws TelegramApiException {
+    private void    sendEditorMessage() throws TelegramApiException {
         deleteMessage(editionMessageId);
         deleteMessage(updateMessageId);
-        questMessage = questMessageDao.getById(questMessageId, currentLanguage);
-        String text = String.format(getText(1048), messageDao.getMessageText(1047, currentLanguage), questMessage.getRange(), questMessage.getMessage());
+        questMessage    = questMessageDao.getById(questMessageId, currentLanguage);
+        String text     = String.format(getText(1048), messageDao.getMessageText(1047, currentLanguage), questMessage.getRange(), questMessage.getMessage());
         sendMessageWithKeyboard(text, 16);
-        waitingType = WaitingType.EDITION_MESSAGE;
+        waitingType     = WaitingType.EDITION_MESSAGE;
     }
 
-    private void changeLanguage() {
+    private void    changeLanguage() {
         if (currentLanguage == Language.ru) {
             currentLanguage = Language.kz;
         } else {
@@ -212,7 +205,7 @@ public class id014_EditSurvey extends Command {
         }
     }
 
-    public boolean isCommandMessage() throws TelegramApiException {
+    public boolean  isCommandMessage()  throws TelegramApiException {
         if (isButton(1012)) {
             sendMessage("Введите новые варианты ответа");
             waitingType = WaitingType.SET_RANGE;

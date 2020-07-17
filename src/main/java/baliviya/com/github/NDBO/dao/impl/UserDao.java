@@ -20,11 +20,6 @@ public class UserDao extends AbstractDao<User> {
         getJdbcTemplate().update(sql, user.getPhone(), user.getFullName(), user.getEmail(), user.getUserName(), user.getChatId());
     }
 
-    public void         updatePhone(User user) {
-        sql = "UPDATE USERS SET PHONE = ? WHERE CHAT_ID = ?";
-        getJdbcTemplate().update(sql, user.getPhone(), user.getChatId());
-    }
-
     public User         getUserByChatId(long chatId) {
         sql = "SELECT * FROM USERS WHERE CHAT_ID = ?";
         return getJdbcTemplate().queryForObject(sql, setParam(chatId), this::mapper);
@@ -44,11 +39,6 @@ public class UserDao extends AbstractDao<User> {
         sql = "SELECT * FROM USERS WHERE EMAIL = ?";
         return getJdbcTemplate().query(sql, setParam(Const.TABLE_NAME) ,this::mapper);
     }
-
-//    public void    updateFullName(User user) {
-//        sql = "UPDATE " + Const.TABLE_NAME + ".USERS SET FULL_NAME = ? WHERE CHAT_ID = ?";
-//        getJdbcTemplate().update(sql, user.getFullName(), user.getChatId());
-//    }
 
     @Override
     protected User      mapper(ResultSet rs, int index) throws SQLException {

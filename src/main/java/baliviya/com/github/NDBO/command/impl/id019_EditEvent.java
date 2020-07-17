@@ -112,9 +112,7 @@ public class id019_EditEvent extends Command {
         deleteMessageId             = sendMessage(String.format(formatMessage, infoByEvent.toString(), getText(Const.SLASH_NEW_MESSAGE)));
     }
 
-    private boolean isCommand(String command) {
-        return updateMessageText.startsWith(command);
-    }
+    private boolean isCommand(String command) { return updateMessageText.startsWith(command); }
 
     private void    sendMessageToGroup()    throws TelegramApiException {
         StringBuilder messageToGroup = new StringBuilder();

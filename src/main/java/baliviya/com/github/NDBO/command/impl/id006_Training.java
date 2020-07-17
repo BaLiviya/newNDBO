@@ -79,7 +79,6 @@ public class id006_Training extends Command {
                 if (hasCallbackQuery()) {
                     if (isButton(Const.JOIN_BUTTON)) {
                         registrationHandling.setIdHandling(handling.getId());
-//                        registrationHandling.setCome(false);
                         factory             .getRegistrationHandlingDao().insertTraining(registrationHandling);
                         sendMessageToSpec();
                         deleteMessageId     = done();

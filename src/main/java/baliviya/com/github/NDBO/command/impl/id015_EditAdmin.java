@@ -21,15 +21,15 @@ public class id015_EditAdmin extends Command {
     private static String showIcon;
 
     @Override
-    public boolean execute() throws TelegramApiException {
+    public  boolean execute()           throws TelegramApiException {
         if (!isAdmin() && !isMainAdmin()) {
             sendMessage(Const.NO_ACCESS);
             return EXIT;
         }
         if (deleteIcon == null) {
-            deleteIcon = getText(1051);
-            showIcon = getText(1052);
-            delete = getText(1053);
+            deleteIcon  = getText(1051);
+            showIcon    = getText(1052);
+            delete      = getText(1053);
         }
         if (message != 0) deleteMessage(message);
         if (hasContact()) {
@@ -50,8 +50,8 @@ public class id015_EditAdmin extends Command {
         return COMEBACK;
     }
 
-    private boolean registerNewAdmin() throws TelegramApiException {
-        long newAdminChatId = update.getMessage().getContact().getUserID();
+    private boolean registerNewAdmin()  throws TelegramApiException {
+        long newAdminChatId     = update.getMessage().getContact().getUserID();
         if (!userDao.isRegistered(newAdminChatId)) {
             sendMessage("Пользователь не зарегистрирован в данном боте");
             return EXIT;
@@ -60,9 +60,9 @@ public class id015_EditAdmin extends Command {
                 sendMessage("Пользователь уже администратор");
                 return EXIT;
             } else {
-                User user = userDao.getUserByChatId(newAdminChatId);
+                User user       = userDao.getUserByChatId(newAdminChatId);
                 adminDao.addAssistant(newAdminChatId, String.format("%s %s %s", user.getUserName(), user.getPhone(), DateUtil.getDbMmYyyyHhMmSs(new Date())));
-                User userAdmin = userDao.getUserByChatId(chatId);
+                User userAdmin  = userDao.getUserByChatId(chatId);
                 log.info("{} added new admin - {} ", getInfoByUser(userAdmin), getInfoByUser(user));
                 sendEditorAdmin();
             }
@@ -70,26 +70,24 @@ public class id015_EditAdmin extends Command {
         return COMEBACK;
     }
 
-    private String getInfoByUser(User user) {
-        return String.format("%s %s %s", user.getFullName(), user.getPhone(), user.getChatId());
-    }
+    private String  getInfoByUser(User user) { return String.format("%s %s %s", user.getFullName(), user.getPhone(), user.getChatId()); }
 
-    private void sendEditorAdmin() throws TelegramApiException {
+    private void    sendEditorAdmin()   throws TelegramApiException {
         deleteMessage(updateMessageId);
         try {
-            getText(true);
+            getText(EXIT);
             message = sendMessage(String.format(getText(1054), text.toString()));
         } catch (TelegramApiException e) {
-            getText(false);
+            getText(COMEBACK);
             message = sendMessage(String.format(getText(1054), text.toString()));
         }
         toDeleteMessage(message);
     }
 
-    private void getText(boolean withLink) {
-        text = new StringBuilder();
-        allAdmins = adminDao.getAll();
-        int count = 0;
+    private void    getText(boolean withLink) {
+        text        = new StringBuilder();
+        allAdmins   = adminDao.getAll();
+        int count   = 0;
         for (Long admin : allAdmins) {
             try {
                 User user = userDao.getUserByChatId(admin);

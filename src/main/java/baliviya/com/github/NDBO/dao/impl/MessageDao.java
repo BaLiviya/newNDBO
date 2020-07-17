@@ -1,6 +1,5 @@
 package baliviya.com.github.NDBO.dao.impl;
 
-
 import baliviya.com.github.NDBO.dao.AbstractDao;
 import baliviya.com.github.NDBO.entity.enums.FileType;
 import baliviya.com.github.NDBO.entity.enums.Language;
@@ -12,34 +11,34 @@ import java.sql.SQLException;
 
 public class MessageDao extends AbstractDao<Message> {
 
-    public Message getMessage(long messageId) {
+    public Message      getMessage(long messageId) {
         sql = "SELECT * FROM " + Const.TABLE_NAME + ".MESSAGE WHERE ID = ? AND LANG_ID = ?";
         return getJdbcTemplate().queryForObject(sql, setParam(messageId, getLanguage().getId()), this::mapper);
     }
 
-    public String getMessageText(long id) {
+    public String       getMessageText(long id) {
         sql = "SELECT NAME FROM " + Const.TABLE_NAME + ".MESSAGE WHERE ID = ? AND LANG_ID = ?";
         return getJdbcTemplate().queryForObject(sql, setParam(id, getLanguage().getId()), String.class);
     }
 
-    public String getMessageText(long id, Language language) {
+    public String       getMessageText(long id, Language language) {
         sql = "SELECT NAME FROM " + Const.TABLE_NAME + ".MESSAGE WHERE ID = ? AND LANG_ID = ?";
         return getJdbcTemplate().queryForObject(sql, setParam(id, language.getId()), String.class);
     }
 
-    public Message getMessage(long messageId, Language language) {
+    public Message      getMessage(long messageId, Language language) {
         sql = "SELECT * FROM " + Const.TABLE_NAME + ".MESSAGE WHERE ID = ? AND LANG_ID = ?";
         return getJdbcTemplate().queryForObject(sql, setParam(messageId, language.getId()), this::mapper);
     }
 
-    public void update(Message message) {
+    public void         update(Message message) {
         sql = "UPDATE " + Const.TABLE_NAME + ".MESSAGE SET NAME = ?, PHOTO = ?, FILE = ?, TYPE_FILE = ? WHERE ID = ? AND LANG_ID = ?";
         getJdbcTemplate().update(sql,message.getName(), message.getPhoto(), message.getFile(), message.getFileType() == null ? null : message.getFileType().name(),
                 message.getId(), message.getLanguage().getId());
     }
 
     @Override
-    protected Message mapper(ResultSet rs, int index) throws SQLException {
+    protected Message   mapper(ResultSet rs, int index) throws SQLException {
         Message message = new Message();
         message.setId(rs.getInt(1));
         message.setName(rs.getString(2));

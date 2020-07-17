@@ -404,9 +404,6 @@ public class id027_AddHandling extends Command {
                 handlingDao.updateTraining(activeHandling);
                 break;
             case 3:
-//                handlingDao.updateBusiness(activeHandling);
-//                break;
-//            case 4:
                 handlingDao.updateConsultation(activeHandling);
                 break;
         }
@@ -432,11 +429,11 @@ public class id027_AddHandling extends Command {
                 waitingType = WaitingType.SET_TRAINING_NAME;
                 break;
             case 3:
-                handlingDao.deleteBusiness(activeHandling.getId());
-                getBusinessName();
-                waitingType = WaitingType.SET_BUSINESS_NAME;
-                break;
-            case 4:
+//                handlingDao.deleteBusiness(activeHandling.getId());
+//                getBusinessName();
+//                waitingType = WaitingType.SET_BUSINESS_NAME;
+//                break;
+//            case 4:
                 handlingDao.deleteConsultation(activeHandling.getId());
                 getConsultationTypes();
                 waitingType = WaitingType.SET_CONSULTATION_TYPE;

@@ -55,30 +55,11 @@ public class Registration {
                 if (botUtil .hasContactOwner(update)) {
                     user    .setPhone(update.getMessage().getContact().getPhoneNumber());
                     user    .setUserName(UpdateUtil.getFrom(update));
-                    // getIin();
-                    // waitingType = WaitingType.SET_IIN;
                     getStatus();
                     waitingType  = WaitingType.SET_STATUS;
                 } else {
                     wrongData();
                     getPhone();
-                }
-                return COMEBACK;
-            case SET_IIN:
-                try {
-                    Long.parseLong(update.getMessage().getText());
-                } catch (NumberFormatException e) {
-                    wrongIinNotNumber();
-                    getIin();
-                    return COMEBACK;
-                }
-                if (update.hasMessage() && update.getMessage().hasText() && update.getMessage().getText().length() == 12) {
-                    user.setIin(update.getMessage().getText());
-                    getStatus();
-                    waitingType  = WaitingType.SET_STATUS;
-                } else {
-                    wrongData();
-                    getIin();
                 }
                 return COMEBACK;
             case SET_STATUS:

@@ -35,7 +35,6 @@ public class id004_FirstRegistration extends Command {
                     recipient.setRegistrationDate(new Date());
                     recipient.setFullName   (user.getFullName());
                     recipient.setPhoneNumber(user.getPhone());
-//                    recipient.setIin        (user.getIin());
                     recipient.setStatus     (user.getStatus());
                 } else {
                     recipient       = recipientDao.getRecipientByChatId(chatId);
@@ -43,8 +42,6 @@ public class id004_FirstRegistration extends Command {
                 }
                  deleteMessageId    = getIin();
                  waitingType        = WaitingType.SET_IIN;
-//                deleteMessageId = getAddress();
-//                waitingType     = WaitingType.SET_ADDRESS;
                 return COMEBACK;
             case SET_IIN:
                 try {
@@ -203,43 +200,6 @@ public class id004_FirstRegistration extends Command {
                     deleteMessageId             = getOther();
                 }
                 return COMEBACK;
-//            case SET_STATUS:
-//                delete();
-//                if (hasCallbackQuery()) {
-//                    if (list.get(Integer.parseInt(updateMessageText)).equals(getText(Const.NEXT_MESSAGE))) {
-//                        StringBuilder stringBuilder = new StringBuilder();
-//                        for (String status : socialBenefitsList) {
-//                            stringBuilder.append(status).append(";").append(space);
-//                        }
-//                        recipient.setStatus(stringBuilder.toString());
-//                        deleteMessageId = getMaritalStatus();
-//                        waitingType     = WaitingType.SET_MARITAL_STATUS;
-//                        socialBenefitsList.clear();
-//                    } else if (list.get(Integer.parseInt(updateMessageText)).equals(getText(Const.OTHERS_MESSAGE))) {
-//                        deleteMessageId = getOther();
-//                        waitingType     = WaitingType.OTHER_STATUS;
-//                        return COMEBACK;
-//                    } else {
-//                        socialBenefitsList.add(list.get(Integer.parseInt(updateMessageText)));
-//                        deleteMessageId = getStatus();
-//                        waitingType     = WaitingType.SET_STATUS;
-//                    }
-//                } else {
-//                    secondDeleteMessageId = wrongData();
-//                    deleteMessageId       = getStatus();
-//                }
-//                return COMEBACK;
-//            case OTHER_STATUS:
-//                delete();
-//                if (hasMessageText()) {
-//                    socialBenefitsList.add(updateMessageText);
-//                    deleteMessageId = getStatus();
-//                    waitingType     = WaitingType.SET_STATUS;
-//                } else {
-//                    secondDeleteMessageId = wrongData();
-//                    deleteMessageId       = getOther();
-//                }
-//                return COMEBACK;
             case SET_MARITAL_STATUS:
                 delete();
                 if (hasCallbackQuery()) {
@@ -616,13 +576,8 @@ public class id004_FirstRegistration extends Command {
         list.clear();
         Arrays.asList(getText(Const.CREDIT_TYPE_MESSAGE).split(Const.SPLIT)).forEach((e) -> list.add(e));
         list.add(getText(Const.OTHERS_MESSAGE));
-//        if (isUpdate)list.add(getText(Const.SKIP_MESSAGE));
         buttonsLeaf = new ButtonsLeaf(list);
-//        if (isUpdate) {
-//            return toDeleteKeyboard(sendMessageWithKeyboard(getUpdateText(recipient.getCreditHistory(), getText(Const.CREDIT_HISTORY_MESSAGE)), buttonsLeaf.getListButton()));
-//        } else {
             return toDeleteKeyboard(sendMessageWithKeyboard(getText(Const.CREDIT_HISTORY_MESSAGE), buttonsLeaf.getListButton()));
-//        }
     }
 
     private int     getCreditInfo()                 throws TelegramApiException { return botUtils.sendMessage(Const.CREDIT_INFO_MESSAGE, chatId); }

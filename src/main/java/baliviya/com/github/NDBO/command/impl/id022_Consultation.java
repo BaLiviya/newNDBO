@@ -33,7 +33,6 @@ public class id022_Consultation extends Command {
     private List<QuestMessage>      allMessage;
     private List<String>            listAnswer;
     private ServiceSurveyAnswer     surveyAnswer;
-
     private int                     deleteMessageId;
     private int                     secondDeleteMessageId;
 
@@ -95,7 +94,6 @@ public class id022_Consultation extends Command {
                 if (hasCallbackQuery()) {
                     if (isButton(Const.JOIN_BUTTON)) {
                         registrationHandling.setIdHandling(handling.getId());
-//                        registrationHandling.setCome(false);
                         factory             .getRegistrationHandlingDao().insertConsultation(registrationHandling);
                         sendMessageToSpec();
                         deleteMessageId     = done();
@@ -177,17 +175,17 @@ public class id022_Consultation extends Command {
 
     private int  getConsultationTypes()                     throws TelegramApiException {
         list.clear();
-        consultationTypes = factory.getCoursesTypeDao().getAllConsultation();
+        consultationTypes   = factory.getCoursesTypeDao().getAllConsultation();
         consultationTypes.forEach((e) -> list.add(e.getName()));
-        buttonsLeaf = new ButtonsLeaf(list);
+        buttonsLeaf         = new ButtonsLeaf(list);
         return toDeleteKeyboard(sendMessageWithKeyboard(getText(Const.CONSULTATION_TYPE_MESSAGE), buttonsLeaf.getListButton()));
     }
 
     private int  getConsultationName(int consultationId)    throws TelegramApiException {
         list.clear();
-        consultationNames = factory.getCoursesNameDao().getAllConsultation(consultationId);
+        consultationNames   = factory.getCoursesNameDao().getAllConsultation(consultationId);
         consultationNames.forEach((e) -> list.add(e.getName()));
-        buttonsLeaf = new ButtonsLeaf(list);
+        buttonsLeaf         = new ButtonsLeaf(list);
         return toDeleteKeyboard(sendMessageWithKeyboard(getText(Const.CONSULTATION_TYPE_MESSAGE), buttonsLeaf.getListButton()));
     }
 

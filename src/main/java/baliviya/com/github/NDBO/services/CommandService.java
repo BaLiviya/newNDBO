@@ -15,9 +15,9 @@ public class CommandService {
     private DaoFactory factory = DaoFactory.getInstance();
     private ButtonDao  buttonDao;
 
-    public Command getCommand(Update update) throws CommandNotFoundException {
-        buttonDao = factory.getButtonDao();
-        Message updateMessage = update.getMessage();
+    public Command  getCommand(Update update) throws CommandNotFoundException {
+        buttonDao               = factory.getButtonDao();
+        Message updateMessage   = update.getMessage();
         String inputtedText;
         if (update.hasCallbackQuery()) {
             inputtedText = update.getCallbackQuery().getData().split(Const.SPLIT)[0];
@@ -50,7 +50,5 @@ public class CommandService {
         return command;
     }
 
-    private Command getCommandById(int id) {
-        return CommandFactory.getCommand(id);
-    }
+    private Command getCommandById(int id) { return CommandFactory.getCommand(id); }
 }

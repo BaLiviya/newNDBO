@@ -23,7 +23,7 @@ public class id009_ShowEvent extends Command {
     private RegistrationEvent   registrationEvent;
 
     @Override
-    public boolean execute() throws TelegramApiException {
+    public boolean  execute()   throws TelegramApiException {
         switch (waitingType) {
             case START:
                 deleteMessage(updateMessageId);
@@ -105,13 +105,13 @@ public class id009_ShowEvent extends Command {
         return EXIT;
     }
 
-    private void delete() {
+    private int     wrongData() throws TelegramApiException { return botUtils.sendMessage(Const.WRONG_DATA_TEXT, chatId); }
+
+    private int     done()      throws TelegramApiException { return botUtils.sendMessage(Const.DONE_JOIN_MESSAGE, chatId); }
+
+    private void    delete() {
         deleteMessage(updateMessageId);
         deleteMessage(deleteMessageId);
         deleteMessage(secondDeleteMessageId);
     }
-
-    private int  wrongData() throws TelegramApiException { return botUtils.sendMessage(Const.WRONG_DATA_TEXT, chatId); }
-
-    private int  done()      throws TelegramApiException { return botUtils.sendMessage(Const.DONE_JOIN_MESSAGE, chatId); }
 }

@@ -21,7 +21,7 @@ public class id013_AddSurvey extends Command {
     private int                deleteMessageId;
 
     @Override
-    public boolean execute() throws TelegramApiException {
+    public boolean  execute() throws TelegramApiException {
         if (!isAdmin() && !isMainAdmin()) {
             sendMessage(Const.NO_ACCESS);
             return EXIT;
@@ -120,7 +120,7 @@ public class id013_AddSurvey extends Command {
         return COMEBACK;
     }
 
-    private void insert() {
+    private void    insert() {
         int questId = questionDao.getNextId("QUESTION");
         questionRu.setId(questId);
         questionKz.setId(questId);
@@ -133,7 +133,7 @@ public class id013_AddSurvey extends Command {
         }
     }
 
-    private void delete() {
+    private void    delete() {
         deleteMessage(deleteMessageId);
         deleteMessage(updateMessageId);
     }

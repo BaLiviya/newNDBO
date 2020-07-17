@@ -34,7 +34,7 @@ public class id007_SupportBusinessProject extends Command {
     private ServiceSurveyAnswer   surveyAnswer;
 
     @Override
-    public boolean execute() throws TelegramApiException {
+    public boolean  execute() throws TelegramApiException {
         switch (waitingType) {
             case START:
                 if(!isRecipient()) {
@@ -160,7 +160,7 @@ public class id007_SupportBusinessProject extends Command {
         return EXIT;
     }
 
-    private int getBusinessName()       throws TelegramApiException {
+    private int     getBusinessName()       throws TelegramApiException {
         list.clear();
         handlingNames = factory.getHandlingNameDao().getAllBusiness();
         handlingNames.forEach((e) -> list.add(e.getName()));
@@ -168,7 +168,7 @@ public class id007_SupportBusinessProject extends Command {
         return toDeleteKeyboard(sendMessageWithKeyboard(getText(Const.SUPPORT_BUSINESS_MESSAGE), buttonsLeaf.getListButton()));
     }
 
-    private int getHandling()           throws TelegramApiException {
+    private int     getHandling()           throws TelegramApiException {
         list.clear();
         handlingList = handlingDao.getAllBusiness(businessId);
         handlingList.forEach((e) -> list.add(e.getFullName()));
@@ -176,19 +176,13 @@ public class id007_SupportBusinessProject extends Command {
         return toDeleteKeyboard(sendMessageWithKeyboard(getText(Const.CHOOSE_SPEC_MESSAGE), buttonsLeaf.getListButton()));
     }
 
-    private int registrationMessage()   throws TelegramApiException {
-        return botUtils.sendMessage(Const.GO_TO_REGISTRATION_MESSAGE, chatId);
-    }
+    private int     registrationMessage()   throws TelegramApiException { return botUtils.sendMessage(Const.GO_TO_REGISTRATION_MESSAGE, chatId); }
 
-    private int wrongData()             throws TelegramApiException {
-        return botUtils.sendMessage(Const.WRONG_DATA_TEXT, chatId);
-    }
+    private int     wrongData()             throws TelegramApiException { return botUtils.sendMessage(Const.WRONG_DATA_TEXT, chatId); }
 
-    private int done()                  throws TelegramApiException {
-        return botUtils.sendMessage(Const.DONE_JOIN_MESSAGE, chatId);
-    }
+    private int     done()                  throws TelegramApiException { return botUtils.sendMessage(Const.DONE_JOIN_MESSAGE, chatId); }
 
-    private void delete() {
+    private void    delete() {
         deleteMessage(updateMessageId);
         deleteMessage(deleteMessageId);
         deleteMessage(secondDeleteMessageId);

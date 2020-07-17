@@ -41,7 +41,6 @@ public class ComplaintReportService {
     private Sheet           sheets;
     private Sheet           sheet;
 
-
     public void             sendSuggestionReport(long chatId, DefaultAbsSender bot, Date dateBegin, Date dateEnd, int messagePrevReport) {
         currentLanguage = LanguageService.getLanguage(chatId);
         try {

@@ -34,14 +34,12 @@ public class id026_EditGroup extends Command {
     private Group               group;
 
     @Override
-    public boolean execute() throws TelegramApiException {
+    public boolean  execute()       throws TelegramApiException {
         if (!isAdmin() && !isMainAdmin()) {
             sendMessage(Const.NO_ACCESS);
             return EXIT;
         }
-        if (commChangeRegGroup == null) {
-            initCommand();
-        }
+        if (commChangeRegGroup == null) initCommand();
         switch (waitingType) {
             case START:
                 deleteMessage(updateMessageId);
@@ -153,17 +151,11 @@ public class id026_EditGroup extends Command {
         commBack            = buttonDao.getButtonText(Const.TAG_BACK_BUTTON);
     }
 
-    private String  yesOrNot(boolean b) {
-        return b ? Const.YES : Const.NO;
-    }
+    private String  yesOrNot(boolean b) { return b ? Const.YES : Const.NO; }
 
-    private String  getLinkGroup(Group group) {
-        return "<a href = \"https://t.me/" + group.getUserName() + "/" + "\">" + group.getNames() + "</a>";
-    }
+    private String  getLinkGroup(Group group) { return "<a href = \"https://t.me/" + group.getUserName() + "/" + "\">" + group.getNames() + "</a>"; }
 
-    private boolean isCommand(String command) {
-        return updateMessageText.startsWith(command);
-    }
+    private boolean isCommand(String command) { return updateMessageText.startsWith(command); }
 
     private void    sendListGroup() throws TelegramApiException {
         String formatMessage        = getText(Const.GROUP_CHANGE_INFO_MESSAGE);
@@ -204,7 +196,7 @@ public class id026_EditGroup extends Command {
         waitingType     = WaitingType.EDITION;
     }
 
-    private void    sendTags() throws TelegramApiException {
+    private void    sendTags()      throws TelegramApiException {
         List<Category>      include             = new ArrayList<>();
         List<Category>      exclude             = new ArrayList<>();
         List<Category>      categories          = categoryDao.getAll();
@@ -233,7 +225,5 @@ public class id026_EditGroup extends Command {
         waitingType     = WaitingType.EDIT_TAG;
     }
 
-    private int     getInt() {
-        return Integer.parseInt(updateMessageText.replaceAll("[^0-9]", ""));
-    }
+    private int     getInt() { return Integer.parseInt(updateMessageText.replaceAll("[^0-9]", "")); }
 }
