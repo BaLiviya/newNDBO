@@ -76,6 +76,8 @@ public class CommandFactory {
                 return new id031_StructureShowInfo();
             case 32:
                 return new id032_SpecialistInfo();
+            case 33:
+                return new id033_SpecShowInfo();
         }
         return null;
     }
