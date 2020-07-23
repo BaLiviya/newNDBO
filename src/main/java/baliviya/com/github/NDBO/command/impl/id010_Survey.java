@@ -31,29 +31,29 @@ public class id010_Survey extends Command {
             case START:
                 deleteMessage(updateMessageId);
                 deleteMessage(deleteMessageId);
-                currentLanguage = LanguageService.getLanguage(chatId);
-                allQuestion = questionDao.getAllActive(currentLanguage, chatId);
+                currentLanguage     = LanguageService.getLanguage(chatId);
+                allQuestion         = questionDao.getAllActive(currentLanguage, chatId);
                 if (allQuestion == null || allQuestion.size() == 0) {
                     deleteMessageId = sendMessage("Вы участвовали во всех опросах");
                     return EXIT;
                 }
-                List<String> list = new ArrayList<>();
+                List<String> list   = new ArrayList<>();
                 allQuestion.forEach((e) -> list.add(e.getName()));
-                buttonsLeaf = new ButtonsLeaf(list);
-                deleteMessageId = toDeleteKeyboard(sendMessageWithKeyboard("Выберите опрос", buttonsLeaf.getListButton()));
-                waitingType = WaitingType.CHOOSE_QUESTION;
+                buttonsLeaf         = new ButtonsLeaf(list);
+                deleteMessageId     = toDeleteKeyboard(sendMessageWithKeyboard("Выберите опрос", buttonsLeaf.getListButton()));
+                waitingType         = WaitingType.CHOOSE_QUESTION;
                 return COMEBACK;
             case CHOOSE_QUESTION:
                 deleteMessage(updateMessageId);
                 deleteMessage(deleteMessageId);
                 if (hasCallbackQuery()) {
-                    question = allQuestion.get(Integer.parseInt(updateMessageText));
-                    allMessage = questMessageDao.getAll(question.getId(), currentLanguage);
-                    listAnswers = new ArrayList<>();
+                    question        = allQuestion.get(Integer.parseInt(updateMessageText));
+                    allMessage      = questMessageDao.getAll(question.getId(), currentLanguage);
+                    listAnswers     = new ArrayList<>();
                     allMessage.forEach((e) -> Collections.addAll(listAnswers, e.getRange().split(",")));
-                    buttonsLeaf = new ButtonsLeaf(listAnswers);
+                    buttonsLeaf     = new ButtonsLeaf(listAnswers);
                     deleteMessageId = toDeleteKeyboard(sendMessageWithKeyboard(question.getDesc(), buttonsLeaf.getListButton()));
-                    waitingType = WaitingType.CHOOSE_OPTION;
+                    waitingType     = WaitingType.CHOOSE_OPTION;
                 } else {
                     deleteMessageId = toDeleteKeyboard(sendMessageWithKeyboard("Выберите опрос", buttonsLeaf.getListButton()));
                 }

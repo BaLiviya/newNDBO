@@ -11,8 +11,8 @@ import java.util.List;
 public class HandlingNameDao extends AbstractDao<HandlingName> {
 
     public List<HandlingName>   getAllTraining() {
-        sql = "SELECT * FROM " + Const.TABLE_NAME + ".TRAINING_NAME" ;
-        return getJdbcTemplate().query(sql, this::mapper);
+        sql = "SELECT * FROM " + Const.TABLE_NAME + ".TRAINING_NAME WHERE LANG_ID = ?" ;
+        return getJdbcTemplate().query(sql, setParam(getLanguage().getId()) ,this::mapper);
     }
 
     public List<HandlingName>   getAllBusiness() {

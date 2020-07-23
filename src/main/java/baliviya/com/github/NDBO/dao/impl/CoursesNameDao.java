@@ -11,13 +11,13 @@ import java.util.List;
 public class CoursesNameDao extends AbstractDao<CoursesName> {
 
     public List<CoursesName>    getAll(int idCoursesType) {
-        sql = "SELECT * FROM " + Const.TABLE_NAME + ".COURSES_NAME WHERE COURSES_TYPE_ID = ?";
-        return getJdbcTemplate().query(sql, setParam(idCoursesType), this::mapper);
+        sql = "SELECT * FROM " + Const.TABLE_NAME + ".COURSES_NAME WHERE COURSES_TYPE_ID = ? AND LANG_ID = ?";
+        return getJdbcTemplate().query(sql, setParam(idCoursesType, getLanguage().getId()), this::mapper);
     }
 
     public List<CoursesName>    getAllConsultation(int idConsultationType) {
-        sql = "SELECT * FROM " + Const.TABLE_NAME + ".CONSULTATION_NAME WHERE CONSULTATION_TYPE_ID = ?";
-        return getJdbcTemplate().query(sql, setParam(idConsultationType), this::mapper);
+        sql = "SELECT * FROM " + Const.TABLE_NAME + ".CONSULTATION_NAME WHERE CONSULTATION_TYPE_ID = ? AND LANG_ID = ?";
+        return getJdbcTemplate().query(sql, setParam(idConsultationType, getLanguage().getId()), this::mapper);
     }
 
     @Override

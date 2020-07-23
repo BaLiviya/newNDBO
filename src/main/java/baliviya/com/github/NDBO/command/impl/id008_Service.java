@@ -45,7 +45,7 @@ public class id008_Service extends Command {
                 registrationService         = new RegistrationHandling();
                 registrationService.setRegistrationDate(new Date());
                 registrationService.setChatId(chatId);
-                registrationService.setIin(Long.parseLong(recipientDao.getRecipientByChatId(chatId).getIin())); // TODO: 08.07.2020 сделать ИИН
+                registrationService.setIin(Long.parseLong(recipientDao.getRecipientByChatId(chatId).getIin()));
                 deleteMessageId             = getServiceType();
                 waitingType                 = WaitingType.SET_SERVICE_TYPE;
                 return COMEBACK;

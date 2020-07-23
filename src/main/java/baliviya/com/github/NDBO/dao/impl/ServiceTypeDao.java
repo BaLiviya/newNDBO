@@ -11,8 +11,8 @@ import java.util.List;
 public class ServiceTypeDao extends AbstractDao<ServiceType> {
 
     public List<ServiceType>    getAll() {
-        sql = "SELECT * FROM " + Const.TABLE_NAME + ".SERVICE_TYPE";
-        return getJdbcTemplate().query(sql, this::mapper);
+        sql = "SELECT * FROM " + Const.TABLE_NAME + ".SERVICE_TYPE WHERE LANG_ID = ?";
+        return getJdbcTemplate().query(sql, setParam(getLanguage().getId()) ,this::mapper);
     }
 
     @Override
