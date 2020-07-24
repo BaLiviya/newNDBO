@@ -22,7 +22,7 @@ public class id027_AddHandling extends Command {
     private List<HandlingName>  businessNames;
     private List<CoursesType>   consultationTypes;
     private List<CoursesName>   consultationNames;
-    private List<User>          users;
+    private List<Specialist>    specialists;
     private ButtonsLeaf         buttonsLeaf;
     private Handling            handling;
     private List<Handling>      handlingList;
@@ -235,9 +235,9 @@ public class id027_AddHandling extends Command {
                         update();
                     } else {
                         handling.setPhoto(updateMessagePhoto);
-                        users       = userDao.getAll();
+                        specialists = specialistDao.getAllSpec();
                         list.clear();
-                        users.forEach(user -> list.add(user.getFullName()));
+                        specialists.forEach(user -> list.add(user.getFullName().split(space)[0]));
                         buttonsLeaf = new ButtonsLeaf(list,6, prevButton, nextButton);
                         toDeleteKeyboard(sendMessageWithKeyboard(getText(Const.SELECT_EMPLOYEE_FROM_HANDLING_MESSAGE), buttonsLeaf.getListButton()));
                         waitingType = WaitingType.HANDLING_EMPLOYEE;
@@ -248,10 +248,12 @@ public class id027_AddHandling extends Command {
                 delete();
                   if (hasCallbackQuery()) {
                       if (isEdit) {
-                          activeHandling.setHandlingTeacherId(users.get(Integer.parseInt(updateMessageText)).getChatId());
+                          activeHandling.setHandlingTeacherId(specialists.get(Integer.parseInt(updateMessageText)).getChatId());
+//                          specialistDao.insert(new Specialist().setChatId(users.get(Integer.parseInt(updateMessageText)).getChatId()).setFullName(users.get(Integer.parseInt(updateMessageText)).getFullName()));
                           update();
                       } else {
-                          handling.setHandlingTeacherId(users.get(Integer.parseInt(updateMessageText)).getChatId());
+                          handling.setHandlingTeacherId(specialists.get(Integer.parseInt(updateMessageText)).getChatId());
+                          //
                           switch (handlingId) {
                               case 0:
                                   handlingDao.insertService(handling);
@@ -379,8 +381,9 @@ public class id027_AddHandling extends Command {
 
     private int     getEmployeeContact()                        throws TelegramApiException {
         list.clear();
-        users       = userDao.getAll();
-        users.forEach(user -> list.add(user.getFullName()));
+//        users       = userDao.getAll();
+        specialists       = specialistDao.getAllSpec();
+        specialists.forEach(user -> list.add(user.getFullName().split(space)[0]));
         buttonsLeaf = new ButtonsLeaf(list,6, prevButton, nextButton);
         return toDeleteKeyboard(sendMessageWithKeyboard(getText(Const.SEND_USER_FROM_SPEC_MESSAGE), buttonsLeaf.getListButton()));
     }

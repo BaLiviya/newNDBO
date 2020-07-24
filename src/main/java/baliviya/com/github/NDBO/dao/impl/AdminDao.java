@@ -26,7 +26,7 @@ public class AdminDao extends AbstractDao<Admin> {
 
     public List<Long>   getAll() {
         sql = "SELECT USER_ID FROM " + Const.TABLE_NAME + ".ADMIN ORDER BY ID";
-       return getJdbcTemplate().queryForList(sql, Long.class);
+        return getJdbcTemplate().queryForList(sql, Long.class);
     }
 
     public void         addAssistant(long chatId, String comment) {

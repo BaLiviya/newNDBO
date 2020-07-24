@@ -80,6 +80,8 @@ public class CommandFactory {
                 return new id033_SpecShowInfo();
             case 34:
                 return new id034_MapLocationSend();
+            case 35:
+                return new id035_SpecialistEdit();
         }
         return null;
     }
