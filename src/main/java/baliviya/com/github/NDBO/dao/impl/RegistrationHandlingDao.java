@@ -32,8 +32,8 @@ public class RegistrationHandlingDao extends AbstractDao<RegistrationHandling> {
     }
 
     public void                         updateCourse(RegistrationHandling registrationHandling) {
-        sql = "UPDATE " + Const.TABLE_NAME + ".REGISTRATION_COURSES SET IS_COME = ? WHERE ID = ?";
-        getJdbcTemplate().update(sql, registrationHandling.isCome(), registrationHandling.getId());
+        sql = "UPDATE " + Const.TABLE_NAME + ".REGISTRATION_COURSES SET IS_COME = ?, MEETING_DATE = ?, TIME = ? WHERE ID = ?";
+        getJdbcTemplate().update(sql, registrationHandling.isCome(), registrationHandling.getMeetingDate(), registrationHandling.getTime(), registrationHandling.getId());
     }
 
 
@@ -58,7 +58,7 @@ public class RegistrationHandlingDao extends AbstractDao<RegistrationHandling> {
     }
 
     public void                         updateTraining(RegistrationHandling registrationHandling) {
-        sql = "UPDATE " + Const.TABLE_NAME + ".REGISTRATION_TRAINING SET IS_COME = ? WHERE ID = ?";
+        sql = "UPDATE " + Const.TABLE_NAME + ".REGISTRATION_TRAINING SET IS_COME = ?, MEETING_DATE = ?, TIME = ? WHERE ID = ?";
         getJdbcTemplate().update(sql, registrationHandling.isCome(), registrationHandling.getId());
     }
 
@@ -105,8 +105,8 @@ public class RegistrationHandlingDao extends AbstractDao<RegistrationHandling> {
     }
 
     public void                         updateConsultation(RegistrationHandling registrationHandling) {
-        sql = "UPDATE " + Const.TABLE_NAME + ".REGISTRATION_CONSULTATION SET IS_COME = ? WHERE ID = ?";
-        getJdbcTemplate().update(sql, registrationHandling.isCome(), registrationHandling.getId());
+        sql = "UPDATE " + Const.TABLE_NAME + ".REGISTRATION_CONSULTATION SET IS_COME = ? WHERE ID = ?, MEETING_DATE = ?, TIME = ? WHERE ID = ?";
+        getJdbcTemplate().update(sql, registrationHandling.isCome(), registrationHandling.getMeetingDate(), registrationHandling.getTime(), registrationHandling.getId());
     }
 
 
@@ -126,8 +126,8 @@ public class RegistrationHandlingDao extends AbstractDao<RegistrationHandling> {
     }
 
     public void                         updateService(RegistrationHandling registrationHandling) {
-        sql = "UPDATE " + Const.TABLE_NAME + ".REGISTRATION_SERVICE SET IS_COME = ? WHERE ID = ?";
-        getJdbcTemplate().update(sql, registrationHandling.isCome(), registrationHandling.getId());
+        sql = "UPDATE " + Const.TABLE_NAME + ".REGISTRATION_SERVICE SET IS_COME = ?, MEETING_DATE = ?, TIME = ? WHERE ID = ?";
+        getJdbcTemplate().update(sql, registrationHandling.isCome(), registrationHandling.getMeetingDate(), registrationHandling.getTime(), registrationHandling.getId());
     }
 
     @Override
@@ -139,6 +139,8 @@ public class RegistrationHandlingDao extends AbstractDao<RegistrationHandling> {
         registrationHandling.setIdHandling(rs.getInt(4));
         registrationHandling.setRegistrationDate(rs.getDate(5));
         registrationHandling.setCome(rs.getBoolean(6));
+        registrationHandling.setMeetingDate(rs.getDate(7));
+        registrationHandling.setTime(rs.getString(8));
         return registrationHandling;
     }
 }

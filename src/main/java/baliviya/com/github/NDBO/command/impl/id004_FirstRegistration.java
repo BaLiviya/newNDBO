@@ -44,6 +44,7 @@ public class id004_FirstRegistration extends Command {
                  waitingType        = WaitingType.SET_IIN;
                 return COMEBACK;
             case SET_IIN:
+                delete();
                 try {
                     Long.parseLong(update.getMessage().getText());
                 } catch (NumberFormatException e) {

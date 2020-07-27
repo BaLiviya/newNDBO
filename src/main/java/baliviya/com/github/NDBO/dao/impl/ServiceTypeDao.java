@@ -15,6 +15,11 @@ public class ServiceTypeDao extends AbstractDao<ServiceType> {
         return getJdbcTemplate().query(sql, setParam(getLanguage().getId()) ,this::mapper);
     }
 
+    public ServiceType          get(int id) {
+        sql = "SELECT * FROM " + Const.TABLE_NAME + ".SERVICE_TYPE WHERE LANG_ID = ? AND ID = ?";
+        return getJdbcTemplate().queryForObject(sql, setParam(getLanguage().getId(), id) ,this::mapper);
+    }
+
     @Override
     protected ServiceType       mapper(ResultSet rs, int index) throws SQLException {
         ServiceType serviceType = new ServiceType();

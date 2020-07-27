@@ -25,6 +25,7 @@ public class id032_SpecialistInfo extends Command {
     private List<String>                userNameList = new ArrayList<>();
     private ButtonsLeaf                 buttonsLeaf;
     private int                         registrationType;
+    private String                      serviceTypeMessage;
 
 
     @Override
@@ -110,8 +111,10 @@ public class id032_SpecialistInfo extends Command {
                     message.append("<b>Номер регистрации : </b>" + registrationHandling.getId()).append(next);
                     message.append("<b>Фамилия Имя Отчество : </b>").append(userDao.getUserByChatId(registrationHandling.getChatId()).getFullName()).append(next);
                     message.append("<b>ИИН : </b>").append(registrationHandling.getIin()).append(next);
+                    message.append("<b>Номер телефона : </b>").append(userDao.getUserByChatId(registrationHandling.getChatId()).getPhone()).append(next);
                     message.append("<b>Дата и время регистрации : </b>").append(registrationHandling.getRegistrationDate()).append(next);
-                    message.append("<b>Статус : </b>").append(registrationHandling.isCome() ? "<i>Пришел</i>" : "<i>Не пришел</i>");
+                    message.append("<b>Статус : </b>").append(registrationHandling.isCome() ? "<i>Пришел</i>" : "<i>Не пришел</i>").append(next);
+                    message.append("<b>Статус приглашения : </b>").append(registrationHandling.getMeetingDate() != null ? "Приглашен на " + registrationHandling.getMeetingDate() + space + registrationHandling.getTime() : "Не приглашен");
                     if (registrationHandling.isCome()) {
                         toDeleteKeyboard(sendMessageWithKeyboard(message.toString(),27));
                     } else {
@@ -126,6 +129,43 @@ public class id032_SpecialistInfo extends Command {
                     toDeleteKeyboard(sendMessageWithKeyboard(Const.SERVICE_LIST_MESSAGE, buttonsLeaf.getListButton()));
                     waitingType             = WaitingType.SET_SERVICE;
                 }
+                if (isButton(Const.INVITE_BUTTON)) {
+                    dateKeyboard            = new DateKeyboard();
+                    sendDate();
+                    waitingType             = WaitingType.MEETING_DATE;
+                }
+                return COMEBACK;
+            case MEETING_DATE:
+                deleteMessage(updateMessageId);
+                if (hasCallbackQuery()) {
+                    if (dateKeyboard.isNext(updateMessageText)) {
+                        sendDate();
+                    } else {
+                        registrationHandling.setMeetingDate(dateKeyboard.getDateDate(updateMessageText));
+                        sendTime();
+                        waitingType = WaitingType.MEETING_TIME;
+                    }
+                }
+                return COMEBACK;
+            case MEETING_TIME:
+                deleteMessage(updateMessageId);
+                if (hasMessageText()) {
+                    registrationHandling.setTime(updateMessageText);
+                    if (handlingDao.isCourseTeacher(chatId)) {
+                        factory.getRegistrationHandlingDao().updateCourse(registrationHandling);
+                    } else if (handlingDao.isServiceTeacher(chatId)) {
+                        factory.getRegistrationHandlingDao().updateService(registrationHandling);
+                    } else if (handlingDao.isTrainingTeacher(chatId)) {
+                        factory.getRegistrationHandlingDao().updateTraining(registrationHandling);
+                    } else if (handlingDao.isConsultationTeacher(chatId)) {
+                        factory.getRegistrationHandlingDao().updateConsultation(registrationHandling);
+                    } else {
+                        registrationHandlings = null;
+                    }
+                    sendMessageToUser();
+                    sendMessage(Const.MEETING_DONE_MESSAGE);
+                    return EXIT;
+                }
                 return COMEBACK;
         }
         return EXIT;
@@ -133,7 +173,19 @@ public class id032_SpecialistInfo extends Command {
 
     private int                     sendStartDate() throws TelegramApiException { return toDeleteKeyboard(sendMessageWithKeyboard(Const.CHOOSE_DATE_MESSAGE, dateKeyboard.getCalendarKeyboard())); }
 
+    private int                     sendDate()      throws TelegramApiException { return toDeleteKeyboard(sendMessageWithKeyboard(Const.MEETING_DATE_MESSAGE, dateKeyboard.getCalendarKeyboard())); }
+
     private int                     sendEndDate()   throws TelegramApiException { return toDeleteKeyboard(sendMessageWithKeyboard(Const.SELECT_END_DATE_MESSAGE, dateKeyboard.getCalendarKeyboard())); }
+
+    private int                     sendTime()      throws TelegramApiException { return sendMessage(Const.MEETING_TIME_MESSAGE); }
+
+    private int                     sendMessageToUser() throws TelegramApiException {
+        String returnMessage = "";
+        if (handlingDao.isServiceTeacher(chatId)) {
+            returnMessage = String.format(getText(1163), factory.getServiceTypeDao().get(registrationHandling.getIdHandling()).getName(), DateUtil.getDayDate(registrationHandling.getMeetingDate()), registrationHandling.getTime());
+        }
+        return sendMessage(returnMessage, registrationHandling.getChatId());
+    }
 
     private void                    getRegistrationList() {
         if (handlingDao.isCourseTeacher(chatId)) {

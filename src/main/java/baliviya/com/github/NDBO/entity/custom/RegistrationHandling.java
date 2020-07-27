@@ -13,4 +13,6 @@ public class RegistrationHandling {
     private int     idHandling;
     private Date    registrationDate;
     private boolean isCome;
+    private Date    meetingDate;
+    private String  time;
 }

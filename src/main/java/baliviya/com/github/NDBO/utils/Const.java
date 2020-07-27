@@ -30,6 +30,7 @@ public class Const {
     public final static int DELETE_FILE_FROM_BUTTON                 =   31;
     public final static int CHANGE_LANGUAGE_BUTTON                  =   32;
     public final static int NEXT_BUTTON                             =   33;
+    public final static int INVITE_BUTTON                           =   69;
     public final static int ADD_KIDS_BUTTON                         = 1000;
     public final static int JOIN_BUTTON                             = 1004;
     public final static int BACK_BUTTON                             = 1005;
@@ -197,4 +198,7 @@ public class Const {
     public static final int CHOOSE_DATE_MESSAGE                     = 1155;
     public static final int SERVICE_LIST_EMPTY_MESSAGE              = 1156;
     public static final int SERVICE_LIST_MESSAGE                    = 1157;
+    public static final int MEETING_DATE_MESSAGE                    = 1160;
+    public static final int MEETING_TIME_MESSAGE                    = 1161;
+    public static final int MEETING_DONE_MESSAGE                    = 1162;
 }
