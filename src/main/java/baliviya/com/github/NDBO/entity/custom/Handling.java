@@ -11,4 +11,5 @@ public class Handling {
     private int     handlingTypeId;
     private String  fullName;
     private long    handlingTeacherId;
+    private int     langId;
 }

@@ -15,4 +15,5 @@ public class RegistrationHandling {
     private boolean isCome;
     private Date    meetingDate;
     private String  time;
+    private String  coming;
 }

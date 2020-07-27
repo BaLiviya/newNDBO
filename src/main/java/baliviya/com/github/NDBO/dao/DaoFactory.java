@@ -10,8 +10,8 @@ import javax.sql.DataSource;
 @NoArgsConstructor
 public class DaoFactory {
 
-    private static DataSource source;
-    private static DaoFactory daoFactory = new DaoFactory();
+    private static  DataSource source;
+    private static  DaoFactory daoFactory = new DaoFactory();
 
     public  static  DaoFactory                  getInstance() { return daoFactory; }
 

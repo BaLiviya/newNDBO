@@ -31,6 +31,7 @@ public class Const {
     public final static int CHANGE_LANGUAGE_BUTTON                  =   32;
     public final static int NEXT_BUTTON                             =   33;
     public final static int INVITE_BUTTON                           =   69;
+    public final static int FINISH_COURSE_BUTTON                    =   70;
     public final static int ADD_KIDS_BUTTON                         = 1000;
     public final static int JOIN_BUTTON                             = 1004;
     public final static int BACK_BUTTON                             = 1005;

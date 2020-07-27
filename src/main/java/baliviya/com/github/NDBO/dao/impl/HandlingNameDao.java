@@ -2,6 +2,7 @@ package baliviya.com.github.NDBO.dao.impl;
 
 import baliviya.com.github.NDBO.dao.AbstractDao;
 import baliviya.com.github.NDBO.entity.custom.HandlingName;
+import baliviya.com.github.NDBO.entity.custom.ServiceType;
 import baliviya.com.github.NDBO.utils.Const;
 
 import java.sql.ResultSet;
@@ -18,6 +19,16 @@ public class HandlingNameDao extends AbstractDao<HandlingName> {
     public List<HandlingName>   getAllBusiness() {
         sql = "SELECT * FROM " + Const.TABLE_NAME + ".BUSINESS_NAME" ;
         return getJdbcTemplate().query(sql, this::mapper);
+    }
+
+    public HandlingName         get(int id) {
+        sql = "SELECT * FROM " + Const.TABLE_NAME + ".TRAINING_NAME WHERE LANG_ID = ? AND ID = ?";
+        return getJdbcTemplate().queryForObject(sql, setParam(getLanguage().getId(), id) ,this::mapper);
+    }
+
+    public HandlingName         getConsultation(int id) {
+        sql = "SELECT * FROM " + Const.TABLE_NAME + ".CONSULTATION_NAME WHERE LANG_ID = ? AND ID = ?";
+        return getJdbcTemplate().queryForObject(sql, setParam(getLanguage().getId(), id) ,this::mapper);
     }
 
     @Override

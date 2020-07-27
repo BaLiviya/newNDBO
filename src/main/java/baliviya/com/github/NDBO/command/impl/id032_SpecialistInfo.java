@@ -26,6 +26,7 @@ public class id032_SpecialistInfo extends Command {
     private ButtonsLeaf                 buttonsLeaf;
     private int                         registrationType;
     private String                      serviceTypeMessage;
+    private boolean                     isCourse;
 
 
     @Override
@@ -42,20 +43,26 @@ public class id032_SpecialistInfo extends Command {
                     int id                  = Integer.parseInt(text.split(next)[0].replaceAll("[^0-9]", ""));
                     registrationHandling    = getRegistration(id);
                     if (registrationHandling != null) {
-                        registrationHandling.setCome(true);
-                        switch (registrationType) {
-                            case 0:
-                                factory.getRegistrationHandlingDao().updateCourse(registrationHandling);
-                                break;
-                            case 1:
-                                factory.getRegistrationHandlingDao().updateService(registrationHandling);
-                                break;
-                            case 2:
-                                factory.getRegistrationHandlingDao().updateTraining(registrationHandling);
-                                break;
-                            case 3:
-                                factory.getRegistrationHandlingDao().updateConsultation(registrationHandling);
-                                break;
+                        if (isCourse) {
+                            if (registrationHandling.getComing() != null) {
+                                registrationHandling.setComing(registrationHandling.getComing() + "1;");
+                            } else {
+                                registrationHandling.setComing("1;");
+                            }
+                            factory.getRegistrationHandlingDao().updateCourse(registrationHandling);
+                        } else {
+                            registrationHandling.setCome(true);
+                            switch (registrationType) {
+                                case 1:
+                                    factory.getRegistrationHandlingDao().updateService(registrationHandling);
+                                    break;
+                                case 2:
+                                    factory.getRegistrationHandlingDao().updateTraining(registrationHandling);
+                                    break;
+                                case 3:
+                                    factory.getRegistrationHandlingDao().updateConsultation(registrationHandling);
+                                    break;
+                            }
                         }
                         sendMessage(Const.DONE_JOIN_MESSAGE);
                         return EXIT;
@@ -113,12 +120,24 @@ public class id032_SpecialistInfo extends Command {
                     message.append("<b>ИИН : </b>").append(registrationHandling.getIin()).append(next);
                     message.append("<b>Номер телефона : </b>").append(userDao.getUserByChatId(registrationHandling.getChatId()).getPhone()).append(next);
                     message.append("<b>Дата и время регистрации : </b>").append(registrationHandling.getRegistrationDate()).append(next);
-                    message.append("<b>Статус : </b>").append(registrationHandling.isCome() ? "<i>Пришел</i>" : "<i>Не пришел</i>").append(next);
-                    message.append("<b>Статус приглашения : </b>").append(registrationHandling.getMeetingDate() != null ? "Приглашен на " + registrationHandling.getMeetingDate() + space + registrationHandling.getTime() : "Не приглашен");
-                    if (registrationHandling.isCome()) {
-                        toDeleteKeyboard(sendMessageWithKeyboard(message.toString(),27));
+                    if (isCourse) {
+                        message.append("<b>Статус : </b>").append(registrationHandling.getComing() != null ? "Пришел " + registrationHandling.getComing().split(";").length + " раз(а)" : "Не пришел").append(next);
                     } else {
-                        toDeleteKeyboard(sendMessageWithKeyboard(message.toString(),26));
+                        message.append("<b>Статус : </b>").append(registrationHandling.isCome() ? "<i>Пришел</i>" : "<i>Не пришел</i>").append(next);
+                    }
+                    message.append("<b>Статус приглашения : </b>").append(registrationHandling.getMeetingDate() != null ? "Приглашен на " + registrationHandling.getMeetingDate() + space + registrationHandling.getTime() : "Не приглашен");
+                    if (isCourse) {
+                        if (registrationHandling.isCome()) {
+                            toDeleteKeyboard(sendMessageWithKeyboard(message.toString(),27));
+                        } else {
+                            toDeleteKeyboard(sendMessageWithKeyboard(message.toString(),29));
+                        }
+                    } else {
+                        if (registrationHandling.isCome()) {
+                            toDeleteKeyboard(sendMessageWithKeyboard(message.toString(),27));
+                        } else {
+                            toDeleteKeyboard(sendMessageWithKeyboard(message.toString(),26));
+                        }
                     }
                     waitingType             = WaitingType.CHOOSE_OPTION;
                 }
@@ -133,6 +152,12 @@ public class id032_SpecialistInfo extends Command {
                     dateKeyboard            = new DateKeyboard();
                     sendDate();
                     waitingType             = WaitingType.MEETING_DATE;
+                }
+                if (isButton(Const.FINISH_COURSE_BUTTON)) {
+                    registrationHandling.setCome(true);
+                    factory.getRegistrationHandlingDao().updateCourse(registrationHandling);
+                    sendMessage(Const.DONE_JOIN_MESSAGE);
+                    return EXIT;
                 }
                 return COMEBACK;
             case MEETING_DATE:
@@ -151,9 +176,13 @@ public class id032_SpecialistInfo extends Command {
                 deleteMessage(updateMessageId);
                 if (hasMessageText()) {
                     registrationHandling.setTime(updateMessageText);
-                    if (handlingDao.isCourseTeacher(chatId)) {
+                    if (isCourse) {
                         factory.getRegistrationHandlingDao().updateCourse(registrationHandling);
-                    } else if (handlingDao.isServiceTeacher(chatId)) {
+                    }
+//                    if (handlingDao.isCourseTeacher(chatId)) {
+//                        factory.getRegistrationHandlingDao().updateCourse(registrationHandling);
+//                    } else
+                    if (handlingDao.isServiceTeacher(chatId)) {
                         factory.getRegistrationHandlingDao().updateService(registrationHandling);
                     } else if (handlingDao.isTrainingTeacher(chatId)) {
                         factory.getRegistrationHandlingDao().updateTraining(registrationHandling);
@@ -171,40 +200,49 @@ public class id032_SpecialistInfo extends Command {
         return EXIT;
     }
 
-    private int                     sendStartDate() throws TelegramApiException { return toDeleteKeyboard(sendMessageWithKeyboard(Const.CHOOSE_DATE_MESSAGE, dateKeyboard.getCalendarKeyboard())); }
+    private int                     sendStartDate()     throws TelegramApiException { return toDeleteKeyboard(sendMessageWithKeyboard(Const.CHOOSE_DATE_MESSAGE, dateKeyboard.getCalendarKeyboard())); }
 
-    private int                     sendDate()      throws TelegramApiException { return toDeleteKeyboard(sendMessageWithKeyboard(Const.MEETING_DATE_MESSAGE, dateKeyboard.getCalendarKeyboard())); }
+    private int                     sendDate()          throws TelegramApiException { return toDeleteKeyboard(sendMessageWithKeyboard(Const.MEETING_DATE_MESSAGE, dateKeyboard.getCalendarKeyboard())); }
 
-    private int                     sendEndDate()   throws TelegramApiException { return toDeleteKeyboard(sendMessageWithKeyboard(Const.SELECT_END_DATE_MESSAGE, dateKeyboard.getCalendarKeyboard())); }
+    private int                     sendEndDate()       throws TelegramApiException { return toDeleteKeyboard(sendMessageWithKeyboard(Const.SELECT_END_DATE_MESSAGE, dateKeyboard.getCalendarKeyboard())); }
 
-    private int                     sendTime()      throws TelegramApiException { return sendMessage(Const.MEETING_TIME_MESSAGE); }
+    private int                     sendTime()          throws TelegramApiException { return sendMessage(Const.MEETING_TIME_MESSAGE); }
 
     private int                     sendMessageToUser() throws TelegramApiException {
         String returnMessage = "";
+        if (isCourse) {
+            returnMessage = String.format(getText(1163), userDao.getUserByChatId(registrationHandling.getChatId()).getFullName(), factory.getCoursesNameDao().get(registrationHandling.getIdHandling()).getName(), DateUtil.getDayDate(registrationHandling.getMeetingDate()), registrationHandling.getTime());
+        }
         if (handlingDao.isServiceTeacher(chatId)) {
-            returnMessage = String.format(getText(1163), factory.getServiceTypeDao().get(registrationHandling.getIdHandling()).getName(), DateUtil.getDayDate(registrationHandling.getMeetingDate()), registrationHandling.getTime());
+            returnMessage = String.format(getText(1163), userDao.getUserByChatId(registrationHandling.getChatId()).getFullName(), factory.getServiceTypeDao().get(registrationHandling.getIdHandling()).getName(), DateUtil.getDayDate(registrationHandling.getMeetingDate()), registrationHandling.getTime());
+        } else if (handlingDao.isTrainingTeacher(chatId)) {
+            returnMessage = String.format(getText(1163), userDao.getUserByChatId(registrationHandling.getChatId()).getFullName(), factory.getHandlingNameDao().get(registrationHandling.getIdHandling()).getName(), DateUtil.getDayDate(registrationHandling.getMeetingDate()), registrationHandling.getTime());
+        } else if (handlingDao.isConsultationTeacher(chatId)) {
+            returnMessage = String.format(getText(1163), userDao.getUserByChatId(registrationHandling.getChatId()).getFullName(), factory.getHandlingNameDao().get(registrationHandling.getIdHandling()).getName(), DateUtil.getDayDate(registrationHandling.getMeetingDate()), registrationHandling.getTime());
         }
         return sendMessage(returnMessage, registrationHandling.getChatId());
     }
 
     private void                    getRegistrationList() {
         if (handlingDao.isCourseTeacher(chatId)) {
-            registrationHandlings = factory.getRegistrationHandlingDao(). getAllCoursesTeacherByTime(start, end,  handlingDao.getCourseByChatId(chatId).getId());
+            isCourse                = true;
+            registrationHandlings   = factory.getRegistrationHandlingDao().getAllCoursesTeacherByTime(start, end, handlingDao.getCourseByChatId(chatId).getHandlingTypeId());
         } else if (handlingDao.isServiceTeacher(chatId)) {
-            registrationHandlings = factory.getRegistrationHandlingDao().getAllServicesTeacherByTime(start, end,  handlingDao.getServiceByChatId(chatId).getId());
+            registrationHandlings   = factory.getRegistrationHandlingDao().getAllServicesTeacherByTime(start, end,  handlingDao.getServiceByChatId(chatId).getId());
         } else if (handlingDao.isTrainingTeacher(chatId)) {
-            registrationHandlings = factory.getRegistrationHandlingDao().getAllTrainingsTeacherByTime(start, end, handlingDao.getTrainingByChatId(chatId).getId());
+            registrationHandlings   = factory.getRegistrationHandlingDao().getAllTrainingsTeacherByTime(start, end, handlingDao.getTrainingByChatId(chatId).getId());
         } else if (handlingDao.isConsultationTeacher(chatId)) {
-            registrationHandlings = factory.getRegistrationHandlingDao().getAllConsultationsTeacherByTime(start, end, handlingDao.getConsultationByChatId(chatId).getId());
+            registrationHandlings   = factory.getRegistrationHandlingDao().getAllConsultationsTeacherByTime(start, end, handlingDao.getConsultationByChatId(chatId).getHandlingTypeId());
         } else {
-            registrationHandlings = null;
+            registrationHandlings   = null;
         }
     }
 
     private RegistrationHandling    getRegistration(int id) {
         RegistrationHandling registrationHandling;
         if (handlingDao.isCourseTeacher(chatId)) {
-            registrationType        = 0;
+            isCourse                = true;
+//            registrationType        = 0;
             registrationHandling    = factory.getRegistrationHandlingDao().getCourseById(id);
         } else if (handlingDao.isServiceTeacher(chatId)) {
             registrationType        = 1;

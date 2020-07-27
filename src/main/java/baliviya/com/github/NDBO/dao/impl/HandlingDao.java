@@ -26,8 +26,8 @@ public class HandlingDao extends AbstractDao<Handling> {
     }
 
     public List<Handling>   getAllCourse(int courseNameId) {
-        sql = "SELECT * FROM " + Const.TABLE_NAME + ".COURSE WHERE COURSE_NAME_ID = ?";
-        return getJdbcTemplate().query(sql, setParam(courseNameId), this::mapper);
+        sql = "SELECT * FROM " + Const.TABLE_NAME + ".COURSE WHERE COURSE_NAME_ID = ? AND LANG_ID = ?";
+        return getJdbcTemplate().query(sql, setParam(courseNameId, getLanguage().getId()), this::mapper);
     }
 
     public      boolean     isCourseTeacher(long chatId) {
@@ -57,8 +57,8 @@ public class HandlingDao extends AbstractDao<Handling> {
     }
 
     public List<Handling>   getAllTraining(int trainingNameId) {
-        sql = "SELECT * FROM " + Const.TABLE_NAME + ".TRAINING WHERE TRAINING_NAME_ID = ?";
-        return getJdbcTemplate().query(sql, setParam(trainingNameId), this::mapper);
+        sql = "SELECT * FROM " + Const.TABLE_NAME + ".TRAINING WHERE TRAINING_NAME_ID = ? AND LANG_ID = ?";
+        return getJdbcTemplate().query(sql, setParam(trainingNameId, getLanguage().getId()), this::mapper);
     }
 
     public      boolean     isTrainingTeacher(long chatId) {
@@ -67,8 +67,8 @@ public class HandlingDao extends AbstractDao<Handling> {
     }
 
     public      Handling    getTrainingByChatId(long chatId) {
-        sql = "SELECT * FROM " + Const.TABLE_NAME + ".TRAINING WHERE TRAINING_TEACHER_ID = ?";
-        return getJdbcTemplate().queryForObject(sql, setParam(chatId), this::mapper);
+        sql = "SELECT * FROM " + Const.TABLE_NAME + ".TRAINING WHERE TRAINING_TEACHER_ID = ? AND LANG_ID = ?";
+        return getJdbcTemplate().queryForObject(sql, setParam(chatId, getLanguage().getId()), this::mapper);
     }
 
 
@@ -99,8 +99,8 @@ public class HandlingDao extends AbstractDao<Handling> {
     }
 
     public List<Handling>   getAllConsultation(int consultationNameId) {
-        sql = "SELECT * FROM " + Const.TABLE_NAME + ".CONSULTATION WHERE CONSULTATION_NAME_ID = ?";
-        return getJdbcTemplate().query(sql, setParam(consultationNameId), this::mapper);
+        sql = "SELECT * FROM " + Const.TABLE_NAME + ".CONSULTATION WHERE CONSULTATION_NAME_ID = ? AND LANG_ID = ?";
+        return getJdbcTemplate().query(sql, setParam(consultationNameId, getLanguage().getId()), this::mapper);
     }
 
     public      boolean     isConsultationTeacher(long chatId) {
@@ -109,8 +109,8 @@ public class HandlingDao extends AbstractDao<Handling> {
     }
 
     public      Handling    getConsultationByChatId(long chatId) {
-        sql = "SELECT * FROM " + Const.TABLE_NAME + ".CONSULTATION WHERE CONSULTATION_TEACHER_ID = ?";
-        return getJdbcTemplate().queryForObject(sql, setParam(chatId), this::mapper);
+        sql = "SELECT * FROM " + Const.TABLE_NAME + ".CONSULTATION WHERE CONSULTATION_TEACHER_ID = ? AND LANG_ID = ?";
+        return getJdbcTemplate().queryForObject(sql, setParam(chatId, getLanguage().getId()), this::mapper);
     }
 
 
@@ -130,8 +130,8 @@ public class HandlingDao extends AbstractDao<Handling> {
     }
 
     public List<Handling>   getAllService(int serviceTypeId) {
-        sql = "SELECT * FROM " + Const.TABLE_NAME + ".SERVICE WHERE SERVICE_TYPE_ID = ?";
-        return getJdbcTemplate().query(sql, setParam(serviceTypeId), this::mapper);
+        sql = "SELECT * FROM " + Const.TABLE_NAME + ".SERVICE WHERE SERVICE_TYPE_ID = ? AND LANG_ID = ?";
+        return getJdbcTemplate().query(sql, setParam(serviceTypeId, getLanguage().getId()), this::mapper);
     }
 
     public      boolean     isServiceTeacher(long chatId) {
@@ -158,6 +158,7 @@ public class HandlingDao extends AbstractDao<Handling> {
         handling.setHandlingTypeId(rs.getInt(4));
         handling.setFullName(rs.getString(5));
         handling.setHandlingTeacherId(rs.getInt(6));
+        handling.setLangId(rs.getInt(7));
         return handling;
     }
 }

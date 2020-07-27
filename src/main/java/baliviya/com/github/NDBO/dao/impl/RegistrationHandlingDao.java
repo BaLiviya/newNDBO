@@ -18,22 +18,22 @@ public class RegistrationHandlingDao extends AbstractDao<RegistrationHandling> {
 
     public List<RegistrationHandling>   getAllCoursesByTime(Date dateBegin, Date dateEnd) {
         sql = "SELECT * FROM " + Const.TABLE_NAME + ".REGISTRATION_COURSES WHERE REGISTRATION_DATE BETWEEN to_date(?,'YYYY-MM-DD') AND to_date(?,'YYYY-MM-DD') ORDER BY ID";
-        return getJdbcTemplate().query(sql, setParam(dateBegin, dateEnd), this::mapper);
+        return getJdbcTemplate().query(sql, setParam(dateBegin, dateEnd), this::courseMapper);
     }
 
     public List<RegistrationHandling>   getAllCoursesTeacherByTime(Date dateBegin, Date dateEnd, int handlingId) {
         sql = "SELECT * FROM " + Const.TABLE_NAME + ".REGISTRATION_COURSES WHERE REGISTRATION_DATE BETWEEN ? AND ? AND COURSE_ID = ? ORDER BY ID";
-        return getJdbcTemplate().query(sql, setParam(dateBegin, dateEnd, handlingId), this::mapper);
+        return getJdbcTemplate().query(sql, setParam(dateBegin, dateEnd, handlingId), this::courseMapper);
     }
 
     public RegistrationHandling         getCourseById(int id) {
         sql = "SELECT * FROM " + Const.TABLE_NAME + ".REGISTRATION_COURSES WHERE ID = ?";
-        return getJdbcTemplate().queryForObject(sql, setParam(id), this::mapper);
+        return getJdbcTemplate().queryForObject(sql, setParam(id), this::courseMapper);
     }
 
     public void                         updateCourse(RegistrationHandling registrationHandling) {
-        sql = "UPDATE " + Const.TABLE_NAME + ".REGISTRATION_COURSES SET IS_COME = ?, MEETING_DATE = ?, TIME = ? WHERE ID = ?";
-        getJdbcTemplate().update(sql, registrationHandling.isCome(), registrationHandling.getMeetingDate(), registrationHandling.getTime(), registrationHandling.getId());
+        sql = "UPDATE " + Const.TABLE_NAME + ".REGISTRATION_COURSES SET IS_COME = ?, MEETING_DATE = ?, TIME = ?, COMMING = ? WHERE ID = ?";
+        getJdbcTemplate().update(sql, registrationHandling.isCome(), registrationHandling.getMeetingDate(), registrationHandling.getTime(), registrationHandling.getComing(), registrationHandling.getId());
     }
 
 
@@ -59,7 +59,7 @@ public class RegistrationHandlingDao extends AbstractDao<RegistrationHandling> {
 
     public void                         updateTraining(RegistrationHandling registrationHandling) {
         sql = "UPDATE " + Const.TABLE_NAME + ".REGISTRATION_TRAINING SET IS_COME = ?, MEETING_DATE = ?, TIME = ? WHERE ID = ?";
-        getJdbcTemplate().update(sql, registrationHandling.isCome(), registrationHandling.getId());
+        getJdbcTemplate().update(sql, registrationHandling.isCome(), registrationHandling.getMeetingDate(), registrationHandling.getTime(), registrationHandling.getId());
     }
 
 
@@ -105,7 +105,7 @@ public class RegistrationHandlingDao extends AbstractDao<RegistrationHandling> {
     }
 
     public void                         updateConsultation(RegistrationHandling registrationHandling) {
-        sql = "UPDATE " + Const.TABLE_NAME + ".REGISTRATION_CONSULTATION SET IS_COME = ? WHERE ID = ?, MEETING_DATE = ?, TIME = ? WHERE ID = ?";
+        sql = "UPDATE " + Const.TABLE_NAME + ".REGISTRATION_CONSULTATION SET IS_COME = ?, MEETING_DATE = ?, TIME = ? WHERE ID = ?";
         getJdbcTemplate().update(sql, registrationHandling.isCome(), registrationHandling.getMeetingDate(), registrationHandling.getTime(), registrationHandling.getId());
     }
 
@@ -141,6 +141,20 @@ public class RegistrationHandlingDao extends AbstractDao<RegistrationHandling> {
         registrationHandling.setCome(rs.getBoolean(6));
         registrationHandling.setMeetingDate(rs.getDate(7));
         registrationHandling.setTime(rs.getString(8));
+        return registrationHandling;
+    }
+
+    protected RegistrationHandling      courseMapper(ResultSet rs, int index) throws SQLException {
+        RegistrationHandling registrationHandling = new RegistrationHandling();
+        registrationHandling.setId(rs.getInt(1));
+        registrationHandling.setChatId(rs.getLong(2));
+        registrationHandling.setIin(rs.getLong(3));
+        registrationHandling.setIdHandling(rs.getInt(4));
+        registrationHandling.setRegistrationDate(rs.getDate(5));
+        registrationHandling.setCome(rs.getBoolean(6));
+        registrationHandling.setMeetingDate(rs.getDate(7));
+        registrationHandling.setTime(rs.getString(8));
+        registrationHandling.setComing(rs.getString(9));
         return registrationHandling;
     }
 }
