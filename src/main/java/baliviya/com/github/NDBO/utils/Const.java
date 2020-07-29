@@ -202,4 +202,6 @@ public class Const {
     public static final int MEETING_DATE_MESSAGE                    = 1160;
     public static final int MEETING_TIME_MESSAGE                    = 1161;
     public static final int MEETING_DONE_MESSAGE                    = 1162;
+    public static final int SURVEY_EMPTY_MESSAGE                    = 1164;
+    public static final int CHOOSE_SURVEY                           = 1165;
 }

@@ -82,6 +82,8 @@ public class CommandFactory {
                 return new id034_MapLocationSend();
             case 35:
                 return new id035_SpecialistEdit();
+            case 36:
+                return new id036_Photo();
         }
         return null;
     }

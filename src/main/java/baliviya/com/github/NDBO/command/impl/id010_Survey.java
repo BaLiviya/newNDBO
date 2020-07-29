@@ -8,6 +8,7 @@ import baliviya.com.github.NDBO.entity.enums.Language;
 import baliviya.com.github.NDBO.entity.enums.WaitingType;
 import baliviya.com.github.NDBO.services.LanguageService;
 import baliviya.com.github.NDBO.utils.ButtonsLeaf;
+import baliviya.com.github.NDBO.utils.Const;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.util.ArrayList;
@@ -34,13 +35,13 @@ public class id010_Survey extends Command {
                 currentLanguage     = LanguageService.getLanguage(chatId);
                 allQuestion         = questionDao.getAllActive(currentLanguage, chatId);
                 if (allQuestion == null || allQuestion.size() == 0) {
-                    deleteMessageId = sendMessage("Вы участвовали во всех опросах");
+                    deleteMessageId = sendMessage(Const.SURVEY_EMPTY_MESSAGE);
                     return EXIT;
                 }
                 List<String> list   = new ArrayList<>();
                 allQuestion.forEach((e) -> list.add(e.getName()));
                 buttonsLeaf         = new ButtonsLeaf(list);
-                deleteMessageId     = toDeleteKeyboard(sendMessageWithKeyboard("Выберите опрос", buttonsLeaf.getListButton()));
+                deleteMessageId     = toDeleteKeyboard(sendMessageWithKeyboard(Const.CHOOSE_SURVEY, buttonsLeaf.getListButton()));
                 waitingType         = WaitingType.CHOOSE_QUESTION;
                 return COMEBACK;
             case CHOOSE_QUESTION:
@@ -55,7 +56,7 @@ public class id010_Survey extends Command {
                     deleteMessageId = toDeleteKeyboard(sendMessageWithKeyboard(question.getDesc(), buttonsLeaf.getListButton()));
                     waitingType     = WaitingType.CHOOSE_OPTION;
                 } else {
-                    deleteMessageId = toDeleteKeyboard(sendMessageWithKeyboard("Выберите опрос", buttonsLeaf.getListButton()));
+                    deleteMessageId = toDeleteKeyboard(sendMessageWithKeyboard(Const.CHOOSE_SURVEY, buttonsLeaf.getListButton()));
                 }
                 return COMEBACK;
             case CHOOSE_OPTION:
@@ -88,13 +89,13 @@ public class id010_Survey extends Command {
                     factory.getSurveyAnswerDao().update(surveyAnswer.getId(), updateMessageText);
                     allQuestion = questionDao.getAllActive(currentLanguage, chatId);
                     if (allQuestion == null || allQuestion.size() == 0) {
-                        deleteMessageId = sendMessage("Вы участвовали во всех опросах");
+                        deleteMessageId = sendMessage(Const.SURVEY_EMPTY_MESSAGE);
                         return EXIT;
                     }
                     List<String> reloadList = new ArrayList<>();
                     allQuestion.forEach((e) -> reloadList.add(e.getName()));
                     buttonsLeaf = new ButtonsLeaf(reloadList);
-                    deleteMessageId = toDeleteKeyboard(sendMessageWithKeyboard("Выберите опрос", buttonsLeaf.getListButton()));
+                    deleteMessageId = toDeleteKeyboard(sendMessageWithKeyboard(Const.CHOOSE_SURVEY, buttonsLeaf.getListButton()));
                     waitingType = WaitingType.CHOOSE_QUESTION;
                 }
                 return COMEBACK;
