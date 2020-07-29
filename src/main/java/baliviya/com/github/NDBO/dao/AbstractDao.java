@@ -4,6 +4,7 @@ import baliviya.com.github.NDBO.config.Conversation;
 import baliviya.com.github.NDBO.entity.enums.Language;
 import baliviya.com.github.NDBO.services.LanguageService;
 import baliviya.com.github.NDBO.utils.Const;
+import baliviya.com.github.NDBO.utils.DataBaseUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.JdbcTemplate;
 
@@ -38,6 +39,8 @@ public abstract class AbstractDao<T> {
         if (getChatId() == 0) return Language.ru;
         return LanguageService.getLanguage(getChatId());
     }
+
+    protected static DataBaseUtils getDBUtils() { return new DataBaseUtils(DaoFactory.getDataSource()); }
 
     private static      DataSource      getDataSource() {   return DaoFactory.getDataSource();}
 

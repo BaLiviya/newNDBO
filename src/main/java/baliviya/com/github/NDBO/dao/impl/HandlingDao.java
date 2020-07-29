@@ -9,10 +9,20 @@ import java.sql.SQLException;
 import java.util.List;
 
 public class HandlingDao extends AbstractDao<Handling> {
-
+/*
     public      void        insertCourse(Handling handling) {
         sql = "INSERT INTO " + Const.TABLE_NAME + ".COURSE (PHOTO, TEXT, COURSE_NAME_ID, FULL_NAME, COURSE_TEACHER_ID) VALUES ( ?,?,?,?,? )";
         getJdbcTemplate().update(sql, handling.getPhoto(), handling.getText(), handling.getHandlingTypeId(), handling.getFullName(), handling.getHandlingTeacherId());
+    }*/
+
+    public      int        insertCourse(Handling handling) {
+        sql = "INSERT INTO " + Const.TABLE_NAME + ".COURSE (PHOTO, TEXT, COURSE_NAME_ID, FULL_NAME, COURSE_TEACHER_ID) VALUES ( ?,?,?,?,? )";
+        return (int) getDBUtils().updateForKeyId(sql, handling.getPhoto(), handling.getText(), handling.getHandlingTypeId(), handling.getFullName(), handling.getHandlingTeacherId());
+    }
+
+    public      void         insertCourseKz(Handling handling) {
+        sql = "INSERT INTO " + Const.TABLE_NAME + ".COURSE (ID, PHOTO, TEXT, COURSE_NAME_ID, FULL_NAME, COURSE_TEACHER_ID) VALUES ( ?,?,?,?,?,? )";
+        getJdbcTemplate().update(sql, handling.getId(), handling.getPhoto(), handling.getText(), handling.getHandlingTypeId(), handling.getFullName(), handling.getHandlingTeacherId());
     }
 
     public      void        updateCourse(Handling handling) {
@@ -41,9 +51,19 @@ public class HandlingDao extends AbstractDao<Handling> {
     }
 
 
-    public      void        insertTraining(Handling handling) {
+/*    public      void        insertTraining(Handling handling) {
         sql = "INSERT INTO " + Const.TABLE_NAME + ".TRAINING (PHOTO, TEXT, TRAINING_NAME_ID, FULL_NAME, TRAINING_TEACHER_ID) VALUES ( ?,?,?,?,? )";
         getJdbcTemplate().update(sql, handling.getPhoto(), handling.getText(), handling.getHandlingTypeId(), handling.getFullName(), handling.getHandlingTeacherId());
+    }*/
+
+    public      int        insertTraining(Handling handling) {
+        sql = "INSERT INTO " + Const.TABLE_NAME + ".TRAINING (PHOTO, TEXT, TRAINING_NAME_ID, FULL_NAME, TRAINING_TEACHER_ID) VALUES ( ?,?,?,?,? )";
+        return (int) getDBUtils().updateForKeyId(sql, handling.getPhoto(), handling.getText(), handling.getHandlingTypeId(), handling.getFullName(), handling.getHandlingTeacherId());
+    }
+
+    public      void         insertTrainingKz(Handling handling) {
+        sql = "INSERT INTO " + Const.TABLE_NAME + ".TRAINING (ID, PHOTO, TEXT, TRAINING_NAME_ID, FULL_NAME, TRAINING_TEACHER_ID) VALUES ( ?,?,?,?,?,? )";
+        getJdbcTemplate().update(sql, handling.getId(), handling.getPhoto(), handling.getText(), handling.getHandlingTypeId(), handling.getFullName(), handling.getHandlingTeacherId());
     }
 
     public      void        updateTraining(Handling handling) {
@@ -83,9 +103,19 @@ public class HandlingDao extends AbstractDao<Handling> {
     }
 
 
-    public      void        insertConsultation(Handling handling) {
+    /*public      void        insertConsultation(Handling handling) {
         sql = "INSERT INTO " + Const.TABLE_NAME + ".CONSULTATION (PHOTO, TEXT, CONSULTATION_NAME_ID, FULL_NAME, CONSULTATION_TEACHER_ID) VALUES ( ?,?,?,?,? )";
         getJdbcTemplate().update(sql, handling.getPhoto(), handling.getText(), handling.getHandlingTypeId(), handling.getFullName(), handling.getHandlingTeacherId());
+    }*/
+
+    public      int        insertConsultation(Handling handling) {
+        sql = "INSERT INTO " + Const.TABLE_NAME + ".CONSULTATION (PHOTO, TEXT, CONSULTATION_NAME_ID, FULL_NAME, CONSULTATION_TEACHER_ID) VALUES ( ?,?,?,?,? )";
+        return (int) getDBUtils().updateForKeyId(sql, handling.getPhoto(), handling.getText(), handling.getHandlingTypeId(), handling.getFullName(), handling.getHandlingTeacherId());
+    }
+
+    public      void         insertConsultationKz(Handling handling) {
+        sql = "INSERT INTO " + Const.TABLE_NAME + ".CONSULTATION (ID, PHOTO, TEXT, CONSULTATION_NAME_ID, FULL_NAME, CONSULTATION_TEACHER_ID) VALUES ( ?,?,?,?,?,? )";
+        getJdbcTemplate().update(sql, handling.getId(), handling.getPhoto(), handling.getText(), handling.getHandlingTypeId(), handling.getFullName(), handling.getHandlingTeacherId());
     }
 
     public      void        updateConsultation(Handling handling) {
@@ -114,9 +144,14 @@ public class HandlingDao extends AbstractDao<Handling> {
     }
 
 
-    public      void        insertService(Handling handling) {
+    public      int        insertService(Handling handling) {
         sql = "INSERT INTO " + Const.TABLE_NAME + ".SERVICE (PHOTO, TEXT, SERVICE_TYPE_ID, FULL_NAME, SERVICE_TEACHER_ID) VALUES ( ?,?,?,?,? )";
-        getJdbcTemplate().update(sql, handling.getPhoto(), handling.getText(), handling.getHandlingTypeId(), handling.getFullName(), handling.getHandlingTeacherId());
+        return (int) getDBUtils().updateForKeyId(sql, handling.getPhoto(), handling.getText(), handling.getHandlingTypeId(), handling.getFullName(), handling.getHandlingTeacherId());
+    }
+
+    public      void         insertServiceKz(Handling handling) {
+        sql = "INSERT INTO " + Const.TABLE_NAME + ".SERVICE (ID, PHOTO, TEXT, SERVICE_TYPE_ID, FULL_NAME, SERVICE_TEACHER_ID) VALUES ( ?,?,?,?,?,? )";
+        getJdbcTemplate().update(sql, handling.getId(), handling.getPhoto(), handling.getText(), handling.getHandlingTypeId(), handling.getFullName(), handling.getHandlingTeacherId());
     }
 
     public      void        updateService(Handling handling) {

@@ -204,4 +204,5 @@ public class Const {
     public static final int MEETING_DONE_MESSAGE                    = 1162;
     public static final int SURVEY_EMPTY_MESSAGE                    = 1164;
     public static final int CHOOSE_SURVEY                           = 1165;
+    public static final int HANDLING_INFO_MESSAGE_KZ                = 1166;
 }
