@@ -15,6 +15,11 @@ public class CoursesNameDao extends AbstractDao<CoursesName> {
         return getJdbcTemplate().query(sql, setParam(idCoursesType, getLanguage().getId()), this::mapper);
     }
 
+    public List<CoursesName>    getAll(int idCoursesType, int langId) {
+        sql = "SELECT * FROM " + Const.TABLE_NAME + ".COURSES_NAME WHERE COURSES_TYPE_ID = ? AND LANG_ID = ?";
+        return getJdbcTemplate().query(sql, setParam(idCoursesType, langId), this::mapper);
+    }
+
     public CoursesName          get(int courseId) {
         sql = "SELECT * FROM " + Const.TABLE_NAME + ".COURSES_NAME WHERE ID = ? AND LANG_ID = ?";
         return getJdbcTemplate().queryForObject(sql, setParam(courseId, getLanguage().getId()), this::mapper);

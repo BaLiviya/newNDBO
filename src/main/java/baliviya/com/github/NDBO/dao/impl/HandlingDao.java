@@ -16,18 +16,23 @@ public class HandlingDao extends AbstractDao<Handling> {
     }*/
 
     public      int        insertCourse(Handling handling) {
-        sql = "INSERT INTO " + Const.TABLE_NAME + ".COURSE (PHOTO, TEXT, COURSE_NAME_ID, FULL_NAME, COURSE_TEACHER_ID) VALUES ( ?,?,?,?,? )";
-        return (int) getDBUtils().updateForKeyId(sql, handling.getPhoto(), handling.getText(), handling.getHandlingTypeId(), handling.getFullName(), handling.getHandlingTeacherId());
+        sql = "INSERT INTO " + Const.TABLE_NAME + ".COURSE (PHOTO, TEXT, COURSE_NAME_ID, FULL_NAME, COURSE_TEACHER_ID, LANG_ID) VALUES ( ?,?,?,?,?,? )";
+        return (int) getDBUtils().updateForKeyId(sql, handling.getPhoto(), handling.getText(), handling.getHandlingTypeId(), handling.getFullName(), handling.getHandlingTeacherId(), handling.getLangId());
     }
 
     public      void         insertCourseKz(Handling handling) {
-        sql = "INSERT INTO " + Const.TABLE_NAME + ".COURSE (ID, PHOTO, TEXT, COURSE_NAME_ID, FULL_NAME, COURSE_TEACHER_ID) VALUES ( ?,?,?,?,?,? )";
+        sql = "INSERT INTO " + Const.TABLE_NAME + ".COURSE (ID, PHOTO, TEXT, COURSE_NAME_ID, FULL_NAME, COURSE_TEACHER_ID, LANG_ID) VALUES ( ?,?,?,?,?,?,? )";
         getJdbcTemplate().update(sql, handling.getId(), handling.getPhoto(), handling.getText(), handling.getHandlingTypeId(), handling.getFullName(), handling.getHandlingTeacherId());
     }
 
     public      void        updateCourse(Handling handling) {
         sql = "UPDATE " + Const.TABLE_NAME + ".COURSE SET FULL_NAME = ?, TEXT = ?, PHOTO = ?, COURSE_TEACHER_ID = ? WHERE ID = ?";
         getJdbcTemplate().update(sql, handling.getFullName(), handling.getText(), handling.getPhoto(), handling.getHandlingTeacherId(), handling.getId());
+    }
+
+    public      void        updateTeacherCourse(Handling handling, int langId) {
+        sql = "UPDATE " + Const.TABLE_NAME + ".COURSE SET COURSE_TEACHER_ID = ? WHERE ID = ? AND LANG_ID = ?";
+        getJdbcTemplate().update(sql, handling.getHandlingTeacherId(), handling.getId(), langId);
     }
 
     public      void        deleteCourse(int handlingId) {
@@ -38,6 +43,11 @@ public class HandlingDao extends AbstractDao<Handling> {
     public List<Handling>   getAllCourse(int courseNameId) {
         sql = "SELECT * FROM " + Const.TABLE_NAME + ".COURSE WHERE COURSE_NAME_ID = ? AND LANG_ID = ?";
         return getJdbcTemplate().query(sql, setParam(courseNameId, getLanguage().getId()), this::mapper);
+    }
+
+    public List<Handling>   getAllCourse(int courseNameId, int langId) {
+        sql = "SELECT * FROM " + Const.TABLE_NAME + ".COURSE WHERE COURSE_NAME_ID = ? AND LANG_ID = ?";
+        return getJdbcTemplate().query(sql, setParam(courseNameId, langId), this::mapper);
     }
 
     public      boolean     isCourseTeacher(long chatId) {
@@ -57,18 +67,23 @@ public class HandlingDao extends AbstractDao<Handling> {
     }*/
 
     public      int        insertTraining(Handling handling) {
-        sql = "INSERT INTO " + Const.TABLE_NAME + ".TRAINING (PHOTO, TEXT, TRAINING_NAME_ID, FULL_NAME, TRAINING_TEACHER_ID) VALUES ( ?,?,?,?,? )";
-        return (int) getDBUtils().updateForKeyId(sql, handling.getPhoto(), handling.getText(), handling.getHandlingTypeId(), handling.getFullName(), handling.getHandlingTeacherId());
+        sql = "INSERT INTO " + Const.TABLE_NAME + ".TRAINING (PHOTO, TEXT, TRAINING_NAME_ID, FULL_NAME, TRAINING_TEACHER_ID, LANG_ID) VALUES ( ?,?,?,?,?,? )";
+        return (int) getDBUtils().updateForKeyId(sql, handling.getPhoto(), handling.getText(), handling.getHandlingTypeId(), handling.getFullName(), handling.getHandlingTeacherId(), handling.getLangId());
     }
 
     public      void         insertTrainingKz(Handling handling) {
-        sql = "INSERT INTO " + Const.TABLE_NAME + ".TRAINING (ID, PHOTO, TEXT, TRAINING_NAME_ID, FULL_NAME, TRAINING_TEACHER_ID) VALUES ( ?,?,?,?,?,? )";
-        getJdbcTemplate().update(sql, handling.getId(), handling.getPhoto(), handling.getText(), handling.getHandlingTypeId(), handling.getFullName(), handling.getHandlingTeacherId());
+        sql = "INSERT INTO " + Const.TABLE_NAME + ".TRAINING (ID, PHOTO, TEXT, TRAINING_NAME_ID, FULL_NAME, TRAINING_TEACHER_ID, LANG_ID) VALUES ( ?,?,?,?,?,?,? )";
+        getJdbcTemplate().update(sql, handling.getId(), handling.getPhoto(), handling.getText(), handling.getHandlingTypeId(), handling.getFullName(), handling.getHandlingTeacherId(), handling.getLangId());
     }
 
     public      void        updateTraining(Handling handling) {
         sql = "UPDATE " + Const.TABLE_NAME + ".TRAINING SET FULL_NAME = ?, TEXT = ?, PHOTO = ?, TRAINING_TEACHER_ID = ? WHERE ID = ?";
         getJdbcTemplate().update(sql, handling.getFullName(), handling.getText(), handling.getPhoto(), handling.getHandlingTeacherId(),handling.getId());
+    }
+
+    public      void        updateTeacherTraining(Handling handling, int langId) {
+        sql = "UPDATE " + Const.TABLE_NAME + ".TRAINING SET TRAINING_TEACHER_ID = ? WHERE ID = ? AND LANG_ID = ?";
+        getJdbcTemplate().update(sql, handling.getHandlingTeacherId(),handling.getId(), langId);
     }
 
     public      void        deleteTraining(int handlingId) {
@@ -79,6 +94,11 @@ public class HandlingDao extends AbstractDao<Handling> {
     public List<Handling>   getAllTraining(int trainingNameId) {
         sql = "SELECT * FROM " + Const.TABLE_NAME + ".TRAINING WHERE TRAINING_NAME_ID = ? AND LANG_ID = ?";
         return getJdbcTemplate().query(sql, setParam(trainingNameId, getLanguage().getId()), this::mapper);
+    }
+
+    public List<Handling>   getAllTraining(int trainingNameId, int langId) {
+        sql = "SELECT * FROM " + Const.TABLE_NAME + ".TRAINING WHERE TRAINING_NAME_ID = ? AND LANG_ID = ?";
+        return getJdbcTemplate().query(sql, setParam(trainingNameId, langId), this::mapper);
     }
 
     public      boolean     isTrainingTeacher(long chatId) {
@@ -109,18 +129,23 @@ public class HandlingDao extends AbstractDao<Handling> {
     }*/
 
     public      int        insertConsultation(Handling handling) {
-        sql = "INSERT INTO " + Const.TABLE_NAME + ".CONSULTATION (PHOTO, TEXT, CONSULTATION_NAME_ID, FULL_NAME, CONSULTATION_TEACHER_ID) VALUES ( ?,?,?,?,? )";
-        return (int) getDBUtils().updateForKeyId(sql, handling.getPhoto(), handling.getText(), handling.getHandlingTypeId(), handling.getFullName(), handling.getHandlingTeacherId());
+        sql = "INSERT INTO " + Const.TABLE_NAME + ".CONSULTATION (PHOTO, TEXT, CONSULTATION_NAME_ID, FULL_NAME, CONSULTATION_TEACHER_ID, LANG_ID) VALUES ( ?,?,?,?,?,? )";
+        return (int) getDBUtils().updateForKeyId(sql, handling.getPhoto(), handling.getText(), handling.getHandlingTypeId(), handling.getFullName(), handling.getHandlingTeacherId(), handling.getLangId());
     }
 
     public      void         insertConsultationKz(Handling handling) {
-        sql = "INSERT INTO " + Const.TABLE_NAME + ".CONSULTATION (ID, PHOTO, TEXT, CONSULTATION_NAME_ID, FULL_NAME, CONSULTATION_TEACHER_ID) VALUES ( ?,?,?,?,?,? )";
-        getJdbcTemplate().update(sql, handling.getId(), handling.getPhoto(), handling.getText(), handling.getHandlingTypeId(), handling.getFullName(), handling.getHandlingTeacherId());
+        sql = "INSERT INTO " + Const.TABLE_NAME + ".CONSULTATION (ID, PHOTO, TEXT, CONSULTATION_NAME_ID, FULL_NAME, CONSULTATION_TEACHER_ID, LANG_ID) VALUES ( ?,?,?,?,?,?,? )";
+        getJdbcTemplate().update(sql, handling.getId(), handling.getPhoto(), handling.getText(), handling.getHandlingTypeId(), handling.getFullName(), handling.getHandlingTeacherId(), handling.getLangId());
     }
 
     public      void        updateConsultation(Handling handling) {
         sql = "UPDATE " + Const.TABLE_NAME + ".CONSULTATION SET FULL_NAME = ?, TEXT = ?, PHOTO = ?, CONSULTATION_TEACHER_ID = ? WHERE ID = ?";
         getJdbcTemplate().update(sql, handling.getFullName(), handling.getText(), handling.getPhoto(), handling.getHandlingTeacherId(), handling.getId());
+    }
+
+    public      void        updateTeacherConsultation(Handling handling, int langId) {
+        sql = "UPDATE " + Const.TABLE_NAME + ".CONSULTATION SET CONSULTATION_TEACHER_ID = ? WHERE ID = ? AND LANG_ID = ?";
+        getJdbcTemplate().update(sql, handling.getHandlingTeacherId(), handling.getId(), langId);
     }
 
     public      void        deleteConsultation(int handlingId) {
@@ -131,6 +156,11 @@ public class HandlingDao extends AbstractDao<Handling> {
     public List<Handling>   getAllConsultation(int consultationNameId) {
         sql = "SELECT * FROM " + Const.TABLE_NAME + ".CONSULTATION WHERE CONSULTATION_NAME_ID = ? AND LANG_ID = ?";
         return getJdbcTemplate().query(sql, setParam(consultationNameId, getLanguage().getId()), this::mapper);
+    }
+
+    public List<Handling>   getAllConsultation(int consultationNameId, int langId) {
+        sql = "SELECT * FROM " + Const.TABLE_NAME + ".CONSULTATION WHERE CONSULTATION_NAME_ID = ? AND LANG_ID = ?";
+        return getJdbcTemplate().query(sql, setParam(consultationNameId, langId), this::mapper);
     }
 
     public      boolean     isConsultationTeacher(long chatId) {
@@ -145,18 +175,23 @@ public class HandlingDao extends AbstractDao<Handling> {
 
 
     public      int        insertService(Handling handling) {
-        sql = "INSERT INTO " + Const.TABLE_NAME + ".SERVICE (PHOTO, TEXT, SERVICE_TYPE_ID, FULL_NAME, SERVICE_TEACHER_ID) VALUES ( ?,?,?,?,? )";
-        return (int) getDBUtils().updateForKeyId(sql, handling.getPhoto(), handling.getText(), handling.getHandlingTypeId(), handling.getFullName(), handling.getHandlingTeacherId());
+        sql = "INSERT INTO " + Const.TABLE_NAME + ".SERVICE (PHOTO, TEXT, SERVICE_TYPE_ID, FULL_NAME, SERVICE_TEACHER_ID, LANG_ID) VALUES ( ?,?,?,?,?,? )";
+        return (int) getDBUtils().updateForKeyId(sql, handling.getPhoto(), handling.getText(), handling.getHandlingTypeId(), handling.getFullName(), handling.getHandlingTeacherId(), handling.getLangId());
     }
 
     public      void         insertServiceKz(Handling handling) {
-        sql = "INSERT INTO " + Const.TABLE_NAME + ".SERVICE (ID, PHOTO, TEXT, SERVICE_TYPE_ID, FULL_NAME, SERVICE_TEACHER_ID) VALUES ( ?,?,?,?,?,? )";
-        getJdbcTemplate().update(sql, handling.getId(), handling.getPhoto(), handling.getText(), handling.getHandlingTypeId(), handling.getFullName(), handling.getHandlingTeacherId());
+        sql = "INSERT INTO " + Const.TABLE_NAME + ".SERVICE (ID, PHOTO, TEXT, SERVICE_TYPE_ID, FULL_NAME, SERVICE_TEACHER_ID, LANG_ID) VALUES ( ?,?,?,?,?,?,? )";
+        getJdbcTemplate().update(sql, handling.getId(), handling.getPhoto(), handling.getText(), handling.getHandlingTypeId(), handling.getFullName(), handling.getHandlingTeacherId(), handling.getLangId());
     }
 
     public      void        updateService(Handling handling) {
         sql = "UPDATE " + Const.TABLE_NAME + ".SERVICE SET FULL_NAME = ?, TEXT = ?, PHOTO = ?, SERVICE_TEACHER_ID = ? WHERE ID = ?";
         getJdbcTemplate().update(sql, handling.getFullName(), handling.getText(), handling.getPhoto(), handling.getHandlingTeacherId() ,handling.getId());
+    }
+
+    public      void        updateTeacherService(Handling handling, int langId) {
+        sql = "UPDATE " + Const.TABLE_NAME + ".SERVICE SET SERVICE_TEACHER_ID = ? WHERE ID = ? AND LANG_ID = ?";
+        getJdbcTemplate().update(sql, handling.getHandlingTeacherId(), handling.getId(), langId);
     }
 
     public      void        deleteService(int handlingId) {
@@ -167,6 +202,11 @@ public class HandlingDao extends AbstractDao<Handling> {
     public List<Handling>   getAllService(int serviceTypeId) {
         sql = "SELECT * FROM " + Const.TABLE_NAME + ".SERVICE WHERE SERVICE_TYPE_ID = ? AND LANG_ID = ?";
         return getJdbcTemplate().query(sql, setParam(serviceTypeId, getLanguage().getId()), this::mapper);
+    }
+
+    public List<Handling>   getAllService(int serviceTypeId, int langId) {
+        sql = "SELECT * FROM " + Const.TABLE_NAME + ".SERVICE WHERE SERVICE_TYPE_ID = ? AND LANG_ID = ?";
+        return getJdbcTemplate().query(sql, setParam(serviceTypeId, langId), this::mapper);
     }
 
     public      boolean     isServiceTeacher(long chatId) {

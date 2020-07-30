@@ -33,7 +33,11 @@ public class id027_AddHandling extends Command {
     private int                 secondDeleteMessageId;
     private int                 consultationTypeId;
     private Handling            activeHandling;
-    private boolean             isEdit = false;
+    private boolean             isEdit;
+    private int                 langId = 1;
+
+    private int                 activeHandlingId;
+    private int                 handlingNameId;
 
     @Override
     public boolean  execute()                                   throws TelegramApiException {
@@ -79,8 +83,8 @@ public class id027_AddHandling extends Command {
             case SET_SERVICE_TYPE:
                 delete();
                 if (hasCallbackQuery()) {
-                    handlingRu = new Handling();
-                    handlingKz = new Handling();
+                    handlingRu              = new Handling();
+                    handlingKz              = new Handling();
                     serviceTypeId           = serviceTypes.get(Integer.parseInt(updateMessageText)).getId();
                     handlingRu.setHandlingTypeId(serviceTypeId);
                     handlingKz.setHandlingTypeId(serviceTypeId);
@@ -100,23 +104,25 @@ public class id027_AddHandling extends Command {
             case SET_COURSES_NAME:
                 delete();
                 if (hasCallbackQuery()) {
-                    handlingRu = new Handling();
-                    handlingKz = new Handling();
+                    handlingRu              = new Handling();
+                    handlingKz              = new Handling();
                     handlingRu.setHandlingTypeId(coursesNames.get(Integer.parseInt(updateMessageText)).getId());
                     handlingKz.setHandlingTypeId(coursesNames.get(Integer.parseInt(updateMessageText)).getId());
                     secondDeleteMessageId   = sendButtonAdd();
-                    deleteMessageId         = getAllCourse(coursesNames.get(Integer.parseInt(updateMessageText)).getId());
+                    activeHandlingId        = coursesNames.get(Integer.parseInt(updateMessageText)).getId();
+                    deleteMessageId         = getAllCourse(activeHandlingId);
                     waitingType             = WaitingType.SERVICE_TYPE_OPTION;
                 }
                 return COMEBACK;
             case SET_TRAINING_NAME:
                 delete();
-                handlingRu = new Handling();
-                handlingKz = new Handling();
+                handlingRu                  = new Handling();
+                handlingKz                  = new Handling();
                 handlingRu.setHandlingTypeId(trainingNames.get(Integer.parseInt(updateMessageText)).getId());
                 handlingKz.setHandlingTypeId(trainingNames.get(Integer.parseInt(updateMessageText)).getId());
                 secondDeleteMessageId       = sendButtonAdd();
-                deleteMessageId             = getAllTraining(trainingNames.get(Integer.parseInt(updateMessageText)).getId());
+                activeHandlingId            = trainingNames.get(Integer.parseInt(updateMessageText)).getId();
+                deleteMessageId             = getAllTraining(activeHandlingId);
                 waitingType                 = WaitingType.SERVICE_TYPE_OPTION;
                 return COMEBACK;
             case SET_BUSINESS_NAME:
@@ -141,7 +147,8 @@ public class id027_AddHandling extends Command {
                     handlingRu = new Handling();
                     handlingRu.setHandlingTypeId(consultationNames.get(Integer.parseInt(updateMessageText)).getId());
                     secondDeleteMessageId   = sendButtonAdd();
-                    deleteMessageId         = getAllConsultation(consultationNames.get(Integer.parseInt(updateMessageText)).getId());
+                    activeHandlingId        = consultationNames.get(Integer.parseInt(updateMessageText)).getId();
+                    deleteMessageId         = getAllConsultation(activeHandlingId);
                     waitingType             = WaitingType.SERVICE_TYPE_OPTION;
                 }
                 return COMEBACK;
@@ -152,7 +159,8 @@ public class id027_AddHandling extends Command {
                     waitingType             = WaitingType.SET_FULL_NAME;
                 }
                 if (hasCallbackQuery()) {
-                    activeHandling          = handlingList.get(Integer.parseInt(updateMessageText));
+                    handlingNameId          = Integer.parseInt(updateMessageText);
+                    activeHandling          = handlingList.get(handlingNameId);
                     sendListService();
                     waitingType             = WaitingType.EDITION_CHOICE;
                 }
@@ -160,6 +168,39 @@ public class id027_AddHandling extends Command {
             case EDITION_CHOICE:
                 delete();
                 if (hasMessageText()) {
+                    if (isCommand("/swap")) {
+                        if (langId == 1) {
+                            langId = 2;
+                        } else {
+                            langId = 1;
+                        }
+                        switch (handlingId) {
+                            case 0:
+                                handlingList    = handlingDao.getAllService(serviceTypeId, langId);
+                                activeHandling  = handlingList.get(activeHandlingId);
+                                sendListService();
+                                waitingType     = WaitingType.EDITION_CHOICE;
+                                return COMEBACK;
+                            case 1:
+                                handlingList    = handlingDao.getAllCourse(activeHandlingId, langId);
+                                activeHandling  = handlingList.get(handlingNameId);
+                                sendListService();
+                                waitingType     = WaitingType.EDITION_CHOICE;
+                                return COMEBACK;
+                            case 2:
+                                handlingList    = handlingDao.getAllTraining(activeHandlingId, langId);
+                                activeHandling  = handlingList.get(handlingNameId);
+                                sendListService();
+                                waitingType     = WaitingType.EDITION_CHOICE;
+                                return COMEBACK;
+                            case 3:
+                                handlingList    = handlingDao.getAllConsultation(activeHandlingId, langId);
+                                activeHandling  = handlingList.get(handlingNameId);
+                                sendListService();
+                                waitingType     = WaitingType.EDITION_CHOICE;
+                                return COMEBACK;
+                        }
+                    }
                     switch (updateMessageText) {
                         case "/back":
                             secondDeleteMessageId = sendButtonAdd();
@@ -230,7 +271,6 @@ public class id027_AddHandling extends Command {
                     } else {
                         handlingRu.setText(updateMessageText);
                         deleteMessageId = getHandlingTextKz();
-                        /*deleteMessageId = getPhoto();*/
                         waitingType     = WaitingType.SET_TEXT_KZ;
                     }
                 }
@@ -240,10 +280,10 @@ public class id027_AddHandling extends Command {
                     if (isEdit){
                         activeHandling.setText(updateMessageText);
                         update();
-                    }else {
+                    } else {
                         handlingKz.setText(updateMessageText);
                         deleteMessageId = getPhoto();
-                        waitingType = WaitingType.SET_PHOTO;
+                        waitingType     = WaitingType.SET_PHOTO;
                     }
                 }
                 return COMEBACK;
@@ -256,12 +296,38 @@ public class id027_AddHandling extends Command {
                     } else {
                         handlingRu.setPhoto(updateMessagePhoto);
                         handlingKz.setPhoto(updateMessagePhoto);
-//                        specialists = specialistDao.getAllSpec();
-//                        list.clear();
-//                        specialists.forEach(user -> list.add(user.getFullName().split(space)[0]));
-//                        buttonsLeaf = new ButtonsLeaf(list,6, prevButton, nextButton);
-//                        toDeleteKeyboard(sendMessageWithKeyboard(getText(Const.SELECT_EMPLOYEE_FROM_HANDLING_MESSAGE), buttonsLeaf.getListButton()));
-//                        waitingType = WaitingType.HANDLING_EMPLOYEE;
+                        switch (handlingId) {
+                            case 0:
+                                handlingRu.setLangId(1);
+                                int ids = handlingDao.insertService(handlingRu);
+                                handlingKz.setId(ids);
+                                handlingKz.setLangId(2);
+                                handlingDao.insertServiceKz(handlingKz);
+                                break;
+                            case 1:
+                                handlingRu.setLangId(1);
+                                int idc = handlingDao.insertCourse(handlingRu);
+                                handlingKz.setId(idc);
+                                handlingKz.setLangId(2);
+                                handlingDao.insertCourseKz(handlingKz);
+                                break;
+                            case 2:
+                                handlingRu.setLangId(1);
+                                int idt = handlingDao.insertTraining(handlingRu);
+                                handlingKz.setId(idt);
+                                handlingKz.setLangId(2);
+                                handlingDao.insertTrainingKz(handlingKz);
+                                break;
+                            case 3:
+                                handlingRu.setLangId(1);
+                                int idcl = handlingDao.insertConsultation(handlingRu);
+                                handlingKz.setId(idcl);
+                                handlingKz.setLangId(2);
+                                handlingDao.insertConsultationKz(handlingKz);
+                                break;
+                        }
+                        sendMessage(Const.DONE_MESSAGE);
+                        return EXIT;
                     }
                 }
                 return COMEBACK;
@@ -269,42 +335,33 @@ public class id027_AddHandling extends Command {
                 delete();
                   if (hasCallbackQuery()) {
                       if (isEdit) {
+                          if (buttonsLeaf.isNext(updateMessageText)) {
+                              toDeleteKeyboard(sendMessageWithKeyboard(getText(Const.SEND_USER_FROM_SPEC_MESSAGE), buttonsLeaf.getListButton()));
+                              return COMEBACK;
+                          }
                           activeHandling.setHandlingTeacherId(specialists.get(Integer.parseInt(updateMessageText)).getChatId());
-//                          specialistDao.insert(new Specialist().setChatId(users.get(Integer.parseInt(updateMessageText)).getChatId()).setFullName(users.get(Integer.parseInt(updateMessageText)).getFullName()));
-                          update();
-                      } else {
-                          handlingRu.setHandlingTeacherId(specialists.get(Integer.parseInt(updateMessageText)).getChatId());
-                          //
                           switch (handlingId) {
                               case 0:
-                                  int ids = handlingDao.insertService(handlingRu);
-                                  handlingKz.setId(ids);
-                                  handlingDao.insertService(handlingKz);
-                                  handlingDao.insertServiceKz(handlingKz);
+                                  handlingDao.updateTeacherService(activeHandling,1);
+                                  handlingDao.updateTeacherService(activeHandling,2);
                                   break;
                               case 1:
-                                  int idc = handlingDao.insertCourse(handlingRu);
-                                  handlingKz.setId(idc);
-                                  handlingDao.insertCourse(handlingRu);
-                                  handlingDao.insertCourseKz(handlingKz);
+                                  handlingDao.updateTeacherCourse(activeHandling, 1);
+                                  handlingDao.updateTeacherCourse(activeHandling, 2);
                                   break;
                               case 2:
-                                  int idt = handlingDao.insertTraining(handlingRu);
-                                  handlingKz.setId(idt);
-                                  handlingDao.insertTraining(handlingRu);
-                                  handlingDao.insertTrainingKz(handlingKz);
+                                  handlingDao.updateTeacherTraining(activeHandling, 1);
+                                  handlingDao.updateTeacherTraining(activeHandling, 2);
                                   break;
                               case 3:
-                                  int idcl = handlingDao.insertConsultation(handlingRu);
-                                  handlingKz.setId(idcl);
-                                  handlingDao.insertConsultation(handlingRu);
-                                  handlingDao.insertConsultationKz(handlingKz);
+                                  handlingDao.updateTeacherConsultation(activeHandling, 1);
+                                  handlingDao.updateTeacherConsultation(activeHandling, 2);
                                   break;
                           }
                           sendMessage(Const.DONE_MESSAGE);
                           return EXIT;
                       }
-                }
+                  }
                 return COMEBACK;
         }
         return EXIT;
@@ -320,7 +377,7 @@ public class id027_AddHandling extends Command {
 
     private int     getAllService(int serviceTypeId)            throws TelegramApiException {
         list.clear();
-        handlingList    = handlingDao.getAllService(serviceTypeId);
+        handlingList    = handlingDao.getAllService(serviceTypeId, langId);
         handlingList    .forEach(service -> list.add(service.getFullName()));
         buttonsLeaf     = new ButtonsLeaf(list);
         return toDeleteKeyboard(sendMessageWithKeyboard(getText(Const.SERVICE_TYPE_MESSAGE), buttonsLeaf.getListButton()));
@@ -328,7 +385,7 @@ public class id027_AddHandling extends Command {
 
     private int     getAllCourse(int courseNameId)              throws TelegramApiException {
         list.clear();
-        handlingList    = handlingDao.getAllCourse(courseNameId);
+        handlingList    = handlingDao.getAllCourse(courseNameId, langId);
         handlingList    .forEach(service -> list.add(service.getFullName()));
         buttonsLeaf     = new ButtonsLeaf(list);
         return toDeleteKeyboard(sendMessageWithKeyboard(getText(Const.COURSE_TYPE_MESSAGE), buttonsLeaf.getListButton()));
@@ -352,7 +409,7 @@ public class id027_AddHandling extends Command {
 
     private int     getAllConsultation(int consultationNameId)  throws TelegramApiException {
         list.clear();
-        handlingList    = handlingDao.getAllConsultation(consultationNameId);
+        handlingList    = handlingDao.getAllConsultation(consultationNameId, langId);
         handlingList    .forEach(training -> list.add(training.getFullName()));
         buttonsLeaf     = new ButtonsLeaf(list);
         return toDeleteKeyboard(sendMessageWithKeyboard(getText(Const.CONSULTATION_TYPE_MESSAGE), buttonsLeaf.getListButton()));
@@ -410,16 +467,15 @@ public class id027_AddHandling extends Command {
 
     private int     getHandlingText()                           throws TelegramApiException { return botUtils.sendMessage(Const.HANDLING_INFO_MESSAGE, chatId); }
 
-    private int     getHandlingTextKz()                           throws TelegramApiException { return botUtils.sendMessage(Const.HANDLING_INFO_MESSAGE_KZ, chatId); }
+    private int     getHandlingTextKz()                         throws TelegramApiException { return botUtils.sendMessage(Const.HANDLING_INFO_MESSAGE_KZ, chatId); }
 
     private int     getPhoto()                                  throws TelegramApiException { return botUtils.sendMessage(Const.SEND_PHOTO_HANDLING_TEACHER, chatId); }
 
     private int     getEmployeeContact()                        throws TelegramApiException {
         list.clear();
-//        users       = userDao.getAll();
-        specialists       = specialistDao.getAllSpec();
+        specialists         = specialistDao.getAllSpec();
         specialists.forEach(user -> list.add(user.getFullName().split(space)[0]));
-        buttonsLeaf = new ButtonsLeaf(list,6, prevButton, nextButton);
+        buttonsLeaf         = new ButtonsLeaf(list,6, prevButton, nextButton);
         return toDeleteKeyboard(sendMessageWithKeyboard(getText(Const.SEND_USER_FROM_SPEC_MESSAGE), buttonsLeaf.getListButton()));
     }
 
@@ -427,7 +483,7 @@ public class id027_AddHandling extends Command {
 
     private void    sendListService()                           throws TelegramApiException {
         String format   = getText(Const.EDIT_SERVICE_MESSAGE);
-        deleteMessageId = sendMessage(String.format(format, "/full", activeHandling.getFullName(), "/text", activeHandling.getText(), "/photo", "/spec" ,"/del", "/back")); // TODO: 11.07.2020 проверить
+        deleteMessageId = sendMessage(String.format(format, "/full", activeHandling.getFullName(), activeHandling.getLangId() == 1 ? "\uD83C\uDDF7\uD83C\uDDFA" : "\uD83C\uDDF0\uD83C\uDDFF" ,"/text", activeHandling.getText(), "/swap", "/photo", "/spec" ,"/del", "/back"));
     }
 
     private void    update()                                    throws TelegramApiException {
@@ -467,11 +523,6 @@ public class id027_AddHandling extends Command {
                 waitingType = WaitingType.SET_TRAINING_NAME;
                 break;
             case 3:
-//                handlingDao.deleteBusiness(activeHandling.getId());
-//                getBusinessName();
-//                waitingType = WaitingType.SET_BUSINESS_NAME;
-//                break;
-//            case 4:
                 handlingDao.deleteConsultation(activeHandling.getId());
                 getConsultationTypes();
                 waitingType = WaitingType.SET_CONSULTATION_TYPE;
