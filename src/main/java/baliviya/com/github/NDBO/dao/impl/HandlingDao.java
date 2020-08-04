@@ -26,8 +26,8 @@ public class HandlingDao extends AbstractDao<Handling> {
     }
 
     public      void        updateCourse(Handling handling) {
-        sql = "UPDATE " + Const.TABLE_NAME + ".COURSE SET FULL_NAME = ?, TEXT = ?, PHOTO = ?, COURSE_TEACHER_ID = ? WHERE ID = ?";
-        getJdbcTemplate().update(sql, handling.getFullName(), handling.getText(), handling.getPhoto(), handling.getHandlingTeacherId(), handling.getId());
+        sql = "UPDATE " + Const.TABLE_NAME + ".COURSE SET FULL_NAME = ?, TEXT = ?, PHOTO = ?, COURSE_TEACHER_ID = ? WHERE ID = ? AND LANG_ID = ?";
+        getJdbcTemplate().update(sql, handling.getFullName(), handling.getText(), handling.getPhoto(), handling.getHandlingTeacherId(), handling.getId(), handling.getLangId());
     }
 
     public      void        updateTeacherCourse(Handling handling, int langId) {
@@ -77,8 +77,8 @@ public class HandlingDao extends AbstractDao<Handling> {
     }
 
     public      void        updateTraining(Handling handling) {
-        sql = "UPDATE " + Const.TABLE_NAME + ".TRAINING SET FULL_NAME = ?, TEXT = ?, PHOTO = ?, TRAINING_TEACHER_ID = ? WHERE ID = ?";
-        getJdbcTemplate().update(sql, handling.getFullName(), handling.getText(), handling.getPhoto(), handling.getHandlingTeacherId(),handling.getId());
+        sql = "UPDATE " + Const.TABLE_NAME + ".TRAINING SET FULL_NAME = ?, TEXT = ?, PHOTO = ?, TRAINING_TEACHER_ID = ? WHERE ID = ? AND LANG_ID = ?";
+        getJdbcTemplate().update(sql, handling.getFullName(), handling.getText(), handling.getPhoto(), handling.getHandlingTeacherId(), handling.getId(), handling.getLangId());
     }
 
     public      void        updateTeacherTraining(Handling handling, int langId) {
@@ -139,8 +139,8 @@ public class HandlingDao extends AbstractDao<Handling> {
     }
 
     public      void        updateConsultation(Handling handling) {
-        sql = "UPDATE " + Const.TABLE_NAME + ".CONSULTATION SET FULL_NAME = ?, TEXT = ?, PHOTO = ?, CONSULTATION_TEACHER_ID = ? WHERE ID = ?";
-        getJdbcTemplate().update(sql, handling.getFullName(), handling.getText(), handling.getPhoto(), handling.getHandlingTeacherId(), handling.getId());
+        sql = "UPDATE " + Const.TABLE_NAME + ".CONSULTATION SET FULL_NAME = ?, TEXT = ?, PHOTO = ?, CONSULTATION_TEACHER_ID = ? WHERE ID = ? AND LANG_ID = ?";
+        getJdbcTemplate().update(sql, handling.getFullName(), handling.getText(), handling.getPhoto(), handling.getHandlingTeacherId(), handling.getId(), handling.getLangId());
     }
 
     public      void        updateTeacherConsultation(Handling handling, int langId) {
@@ -185,8 +185,8 @@ public class HandlingDao extends AbstractDao<Handling> {
     }
 
     public      void        updateService(Handling handling) {
-        sql = "UPDATE " + Const.TABLE_NAME + ".SERVICE SET FULL_NAME = ?, TEXT = ?, PHOTO = ?, SERVICE_TEACHER_ID = ? WHERE ID = ?";
-        getJdbcTemplate().update(sql, handling.getFullName(), handling.getText(), handling.getPhoto(), handling.getHandlingTeacherId() ,handling.getId());
+        sql = "UPDATE " + Const.TABLE_NAME + ".SERVICE SET FULL_NAME = ?, TEXT = ?, PHOTO = ?, SERVICE_TEACHER_ID = ? WHERE ID = ? AND LANG_ID = ?";
+        getJdbcTemplate().update(sql, handling.getFullName(), handling.getText(), handling.getPhoto(), handling.getHandlingTeacherId() ,handling.getId(), handling.getLangId());
     }
 
     public      void        updateTeacherService(Handling handling, int langId) {
