@@ -176,8 +176,8 @@ public class id027_AddHandling extends Command {
                         }
                         switch (handlingId) {
                             case 0:
-                                handlingList    = handlingDao.getAllService(serviceTypeId, langId);
-                                activeHandling  = handlingList.get(activeHandlingId);
+                                handlingList    = handlingDao.getAllUserService(serviceTypeId, langId);
+                                activeHandling  = handlingList.get(handlingNameId);
                                 sendListService();
                                 waitingType     = WaitingType.EDITION_CHOICE;
                                 return COMEBACK;
@@ -377,7 +377,7 @@ public class id027_AddHandling extends Command {
 
     private int     getAllService(int serviceTypeId)            throws TelegramApiException {
         list.clear();
-        handlingList    = handlingDao.getAllService(serviceTypeId, langId);
+        handlingList    = handlingDao.getAllUserService(serviceTypeId, langId);
         handlingList    .forEach(service -> list.add(service.getFullName()));
         buttonsLeaf     = new ButtonsLeaf(list);
         return toDeleteKeyboard(sendMessageWithKeyboard(getText(Const.SERVICE_TYPE_MESSAGE), buttonsLeaf.getListButton()));

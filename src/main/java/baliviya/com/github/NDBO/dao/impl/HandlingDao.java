@@ -204,7 +204,7 @@ public class HandlingDao extends AbstractDao<Handling> {
         return getJdbcTemplate().query(sql, setParam(serviceTypeId, getLanguage().getId()), this::mapper);
     }
 
-    public List<Handling>   getAllService(int serviceTypeId, int langId) {
+    public List<Handling>   getAllUserService(int serviceTypeId, int langId) {
         sql = "SELECT * FROM " + Const.TABLE_NAME + ".SERVICE WHERE SERVICE_TYPE_ID = ? AND LANG_ID = ?";
         return getJdbcTemplate().query(sql, setParam(serviceTypeId, langId), this::mapper);
     }
