@@ -127,7 +127,7 @@ public class id027_AddHandling extends Command {
                 return COMEBACK;
             case SET_BUSINESS_NAME:
                 delete();
-                handlingRu = new Handling();
+                handlingRu                  = new Handling();
                 handlingRu.setHandlingTypeId(businessNames.get(Integer.parseInt(updateMessageText)).getId());
                 secondDeleteMessageId       = sendButtonAdd();
                 deleteMessageId             = getAllBusiness(businessNames.get(Integer.parseInt(updateMessageText)).getId());
