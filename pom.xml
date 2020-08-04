@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>baliviya.com.github</groupId>
-    <artifactId>NDBO</artifactId>
+    <artifactId>newNDBO</artifactId>
     <version>1.0</version>
 
     <build>
@@ -22,7 +22,7 @@
                         <configuration>
                             <archive>
                                 <manifest>
-                                    <mainClass>baliviya.com.github.NDBO.Main</mainClass>
+                                    <mainClass>baliviya.com.github.newNDBO.Main</mainClass>
                                 </manifest>
                             </archive>
                             <descriptorRefs>

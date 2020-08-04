@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/NDBO.iml" filepath="$PROJECT_DIR$/NDBO.iml" />
+      <module fileurl="file://$PROJECT_DIR$/newNDBO.iml" filepath="$PROJECT_DIR$/newNDBO.iml" />
     </modules>
   </component>
 </project>
