@@ -5,7 +5,7 @@ public class Const {
     public static final String SPLIT                                = ";";
     public static final String SPLIT_RANGE                          = ",";
     public static final String ID_MARK                              = "/comId";
-    public static final String TABLE_NAME                           = "TURKS";
+    public static final String TABLE_NAME                           = "NAUR";
     public static final String YES                                  = "✅";
     public static final String NO                                   = "❌";
 

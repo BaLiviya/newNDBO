@@ -98,9 +98,9 @@ public class id035_SpecialistEdit extends Command {
 //                    text.append("Должен быть минимум 1 администратор.").append(next);
 //                } else {
                     if (withLink) {
-                        text.append(delete).append(count).append(deleteIcon).append(" - ").append(showIcon).append(getLinkForUser(user.getChatId(), user.getUserName())).append(space).append(next);
+                        text.append(delete).append(count++).append(deleteIcon).append(" - ").append(showIcon).append(getLinkForUser(user.getChatId(), user.getUserName())).append(space).append(next);
                     } else {
-                        text.append(delete).append(count).append(deleteIcon).append(" - ").append(getInfoByUser(user)).append(space).append(next);
+                        text.append(delete).append(count++).append(deleteIcon).append(" - ").append(getInfoByUser(user)).append(space).append(next);
                     }
 //                }
 //                count++;
